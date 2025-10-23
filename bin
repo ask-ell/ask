@@ -1,0 +1,3 @@
+#!/bin/bash
+
+make -f "$PWD/.ask/Makefile" $1
