@@ -2,6 +2,8 @@ ASK_VERSION := "0.0.5"
 
 DOCKER_SWARM_STACK_NAME := $(shell cat .ask/NAME)
 
+MAKEFILE_PATH := ".ask/Makefile"
+
 # TODO: https://ask-ell.atlassian.net/browse/ASK-3
 # packageManager := docker run -it --user=node --rm -v $(PWD):/home/node/workspace --workdir /home/node/workspace node:20 npm
 packageManager := npm
@@ -14,7 +16,7 @@ help:
 .PHONY: reload-makefile
 # Reload Makefile from latest Ask version
 reload-makefile:
-	curl -o Makefile https://raw.githubusercontent.com/ask-ell/ask/refs/heads/release/types/node/Makefile
+	curl -o $(MAKEFILE_PATH) https://raw.githubusercontent.com/ask-ell/ask/refs/heads/release/types/node/Makefile
 
 .PHONY: requirements-get
 # Get requirements
@@ -35,7 +37,7 @@ install:
 	date > node_modules/last_install
 
 node_modules/last_install:
-	@make -f .ask/Makefile install
+	@make -f $(MAKEFILE_PATH) install
 
 .PHONY: build
 # Build project
@@ -45,7 +47,7 @@ build: node_modules/last_install
 	date > .ask/build/last_build
 
 .ask/build/last_build:
-	@make -f .ask/Makefile build
+	@make -f $(MAKEFILE_PATH) build
 
 .PHONY: serve
 # Run services in development mode
