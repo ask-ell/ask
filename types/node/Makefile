@@ -1,58 +1,88 @@
-ASK_VERSION := "0.0.4"
+ASK_VERSION := "0.0.5"
 
-.PHONY: reload-makefile
-# Reload Makefile from latest Ask version
-reload-makefile:
-	curl -o Makefile https://raw.githubusercontent.com/ask-ell/ask/refs/heads/release/types/node/Makefile
+DOCKER_SWARM_STACK_NAME := $(shell cat .ask/NAME)
+
+# TODO: https://ask-ell.atlassian.net/browse/ASK-3
+# packageManager := docker run -it --user=node --rm -v $(PWD):/home/node/workspace --workdir /home/node/workspace node:20 npm
+packageManager := npm
 
 .PHONY: help
 # Show help
 help:
 	@cat $(MAKEFILE_LIST) | docker run --rm -i xanders/make-help
 
-.env:
-	cp .env.sample .env
+.PHONY: reload-makefile
+# Reload Makefile from latest Ask version
+reload-makefile:
+	curl -o Makefile https://raw.githubusercontent.com/ask-ell/ask/refs/heads/release/types/node/Makefile
+
+.PHONY: requirements-get
+# Get requirements
+requirements-get:
+	@echo "Requirements"
+	@echo "Make : https://www.gnu.org/software/make/manual/make.html"
+	@echo "Node : https://nodejs.org/"
+	@echo "NPM : https://www.npmjs.com/"
+	@echo "Docker : https://docker.com/"
+
+.ask/secrets.json:
+	cp -r .ask/secrets.sample.json .ask/secrets.json
 
 .PHONY: install
 # Install dependencies
 install:
-	npm install
+	$(packageManager) install
 	date > node_modules/last_install
 
 node_modules/last_install:
-	@make install
+	@make -f .ask/Makefile install
 
 .PHONY: build
 # Build project
-build:
-	npm run build
-	mkdir -p build
-	date > build/last_build
+build: node_modules/last_install
+	$(packageManager) run build
+	mkdir -p .ask/build
+	date > .ask/build/last_build
 
-build/last_build:
-	@make build
+.ask/build/last_build:
+	@make -f .ask/Makefile build
 
 .PHONY: serve
-# Run project in development mode
-serve: .env node_modules/last_install
-	npm run start:dev
+# Run services in development mode
+serve: .ask/secrets.json node_modules/last_install
+	killall webpack || true
+	$(packageManager) run start:dev
 
 .PHONY: format
 # Format project
 format:
-	npm run format
+	$(packageManager) run format
 
 .PHONY: lint
 # Format project
 lint:
-	npm run lint
+	$(packageManager) run lint
 
 .PHONY: test
 # Run tests
 test: node_modules/last_install
-	npm run test
+	$(packageManager) run test
 
 .PHONY: test-watch
 # Run tests in watch mode
 test-watch: node_modules/last_install
-	npm run test:watch
+	$(packageManager) run test:watch
+
+.PHONY: clean
+# Stop and clean services
+clean:
+	killall webpack || true
+	$(packageManager) run nx reset
+
+.PHONY: deploy
+deploy:
+	docker stack deploy -c .ask/swarm.yml $(DOCKER_SWARM_STACK_NAME)
+
+.PHONY: undeploy
+undeploy:
+	docker stack rm $(DOCKER_SWARM_STACK_NAME)
