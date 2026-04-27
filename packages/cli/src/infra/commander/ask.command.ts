@@ -1,4 +1,5 @@
 import { Command } from "commander";
+import { MaybeUndefined } from "@ask-ell/core";
 
 import { Id, IProject, IProjectConfiguration, ITask } from "../../shared/types";
 import { askProject, nxProjectConfiguration } from "../../shared/data";
@@ -28,7 +29,15 @@ export class AskCommand extends Command {
         });
     
         this.tasks.forEach((task: ITask): void => {
-            // TODO: manage "pre" hook
+            if(task.id.includes('pre:')) {
+                const nextTaskId: Id = task.id.split('pre:')[1];
+                const nextTask: MaybeUndefined<ITask> = this.tasks.get(nextTaskId);
+                if(nextTask) {
+                    nextTask.instructions = [...task.instructions, ...nextTask.instructions];
+                    this.tasks.set(nextTaskId, nextTask);
+                }
+                return;
+            }
             if(task.id.includes('post:')) {
                 const previousTaskId: Id = task.id.split('post:')[1];
                 this.tasks.get(previousTaskId)?.instructions.push(...task.instructions);

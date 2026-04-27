@@ -123,6 +123,27 @@ export const askProject: IProject = {
             instructions: [
                 './node_modules/.bin/nx build cli'
             ]
+        },
+        {
+            id: 'pre:hello',
+            description: "pre hello task",
+            instructions: [
+                'echo \"This is a pre-hook for the hello task!\"'
+            ]
+        },
+        {
+            id: 'hello',
+            description: "Just say 'hello'",
+            instructions: [
+                'echo \"Hello from ASK!\"'
+            ]
+        },
+        {
+            id: 'post:hello',
+            description: "post hello task",
+            instructions: [
+                'echo \"This is a post-hook for the hello task!\"'
+            ]
         }
     ]
 };
