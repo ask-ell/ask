@@ -1,8 +1,8 @@
 import { Command } from "commander";
 
-import { Id, IProject, IProjectConfiguration, ITask } from "./types";
-import { askProject, nxProjectConfiguration } from "./data";
-import { TaskRunner } from "./task.runner";
+import { Id, IProject, IProjectConfiguration, ITask } from "../../shared/types";
+import { askProject, nxProjectConfiguration } from "../../shared/data";
+import { TaskRunner } from "../../shared/task.runner";
 
 
 export class AskCommand extends Command {
