@@ -1,0 +1,42 @@
+{
+  "name": "cli",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "packages/cli/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{workspaceRoot}/dist/packages/cli"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/packages/cli",
+        "main": "packages/cli/src/main.ts",
+        "tsConfig": "packages/cli/tsconfig.app.json",
+        "webpackConfig": "packages/cli/webpack.config.js",
+        "assets": ["packages/cli/src/assets"],
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
+      }
+    },
+    "chmod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "chmod +x dist/packages/cli/main.js"
+      }
+    },
+    "test-executable": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build", "chmod"],
+      "options": {
+        "command": "node dist/packages/cli/main.js"
+      }
+    }
+  }
+}
