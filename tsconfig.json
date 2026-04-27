@@ -8,6 +8,9 @@
     },
     {
       "path": "./services/back-end"
+    },
+    {
+      "path": "./packages/cli"
     }
   ]
 }
