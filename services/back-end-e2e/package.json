@@ -1,10 +1,10 @@
 {
-  "name": "@ask-ell/back-end-e2e",
+  "name": "@ask-ell/ask-back-end-e2e",
   "version": "0.0.1",
   "private": true,
   "nx": {
     "implicitDependencies": [
-      "@ask-ell/back-end"
+      "@ask-ell/ask-back-end"
     ],
     "targets": {
       "e2e": {
@@ -17,8 +17,8 @@
           "passWithNoTests": true
         },
         "dependsOn": [
-          "@ask-ell/back-end:build",
-          "@ask-ell/back-end:serve"
+          "@ask-ell/ask-back-end:build",
+          "@ask-ell/ask-back-end:serve"
         ]
       }
     }

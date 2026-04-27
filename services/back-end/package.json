@@ -1,5 +1,5 @@
 {
-  "name": "@ask-ell/back-end",
+  "name": "@ask-ell/ask-back-end",
   "version": "0.0.1",
   "private": true,
   "nx": {
@@ -63,15 +63,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "@ask-ell/back-end:build",
+          "buildTarget": "@ask-ell/ask-back-end:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "@ask-ell/back-end:build:development"
+            "buildTarget": "@ask-ell/ask-back-end:build:development"
           },
           "production": {
-            "buildTarget": "@ask-ell/back-end:build:production"
+            "buildTarget": "@ask-ell/ask-back-end:build:production"
           }
         }
       },

@@ -4,9 +4,9 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug @ask-ell/back-end with Nx",
+      "name": "Debug @ask-ell/ask-back-end with Nx",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["nx", "serve", "@ask-ell/back-end"],
+      "runtimeArgs": ["nx", "serve", "@ask-ell/ask-back-end"],
       "env": {
         "NODE_OPTIONS": "--inspect=9229"
       },
@@ -22,9 +22,9 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug @ask-ell/cli with Nx",
+      "name": "Debug @ask-ell/ask-cli with Nx",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["nx", "serve", "@ask-ell/cli"],
+      "runtimeArgs": ["nx", "serve", "@ask-ell/ask-cli"],
       "env": {
         "NODE_OPTIONS": "--inspect=9230"
       },

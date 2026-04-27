@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "start:dev": "nx run-many -t serve"
+    "start:dev": "nx serve @ask-ell/ask-back-end"
   },
   "private": true,
   "devDependencies": {
@@ -14,7 +14,6 @@
     "@nx/eslint": "22.7.0",
     "@nx/eslint-plugin": "22.7.0",
     "@nx/jest": "22.7.0",
-    "@nx/js": "^22.7.0",
     "@nx/node": "22.7.0",
     "@nx/web": "22.7.0",
     "@nx/webpack": "22.7.0",
@@ -54,6 +53,7 @@
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@nx/esbuild": "^22.7.0",
     "@nx/nest": "^22.7.0",
     "axios": "^1.6.0",
     "reflect-metadata": "^0.1.13",

@@ -2,6 +2,9 @@
   "name": "@ask-ell/ask-cli",
   "version": "0.0.1",
   "private": true,
+  "bin": {
+    "ask": "./main.js"
+  },
   "nx": {
     "targets": {
       "prune-lockfile": {
@@ -46,15 +49,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "@ask-ell/cli:build",
+          "buildTarget": "@ask-ell/ask-cli:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "@ask-ell/cli:build:development"
+            "buildTarget": "@ask-ell/ask-cli:build:development"
           },
           "production": {
-            "buildTarget": "@ask-ell/cli:build:production"
+            "buildTarget": "@ask-ell/ask-cli:build:production"
           }
         }
       },
