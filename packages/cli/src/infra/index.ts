@@ -1,1 +1,1 @@
-export * from './commander';
+export * from './full-stack';
