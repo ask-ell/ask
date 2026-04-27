@@ -111,6 +111,13 @@ export const askProject: IProject = {
     configuration: 'nx',
     tasks: [
         {
+            id: 'post:install',
+            description: "post install task",
+            instructions: [
+                '@ask build:cli'
+            ]
+        },
+        {
             id: 'build:cli',
             description: "build the CLI",
             instructions: [

@@ -1,24 +1,11 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { execSync } from "node:child_process";
-import { ILogger } from "@ask-ell/core";
 
 import { askProject, nxProjectConfiguration } from "./data";
 import { Id, IProject, IProjectConfiguration, ITask } from "./types";
+import { TaskRunner } from "./task.runner";
 
-
-const logger: ILogger = console;
-
-function runInstructions(instructions: string[]): void {
-    instructions.forEach((instruction: string): void => {
-        logger.info(`Running instruction: ${instruction}`);
-        execSync(instruction, { stdio: 'inherit' });
-        logger.info(`Task completed !`);
-    });
-}
-
-const setCommandAction = (task: ITask) => (): void => runInstructions(task.instructions);
 
 async function main(): Promise<void> {
     const command: Command = new Command('ask');
@@ -40,10 +27,19 @@ async function main(): Promise<void> {
     });
 
     tasks.forEach((task: ITask): void => {
+        // TODO: manage "pre" hook
+        if(task.id.includes('post:')) {
+            const previousTaskId: Id = task.id.split('post:')[1];
+            tasks.get(previousTaskId)?.instructions.push(...task.instructions);
+        }
+    });
+
+    tasks.forEach((task: ITask): void => {
+        const taskRunner: TaskRunner = new TaskRunner(task);
         command
             .command(task.id)
             .description(task.description)
-            .action(setCommandAction(task));
+            .action(taskRunner.run.bind(taskRunner));
     });
 
     command.parse();
