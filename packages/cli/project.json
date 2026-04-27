@@ -25,6 +25,9 @@
         }
       }
     },
+    "serve": {
+      "executor": "nx:noop"
+    },
     "chmod": {
       "executor": "nx:run-commands",
       "options": {

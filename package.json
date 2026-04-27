@@ -2,10 +2,6 @@
   "name": "@ask-ell/ask",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {
-    "nx": "nx",
-    "start:dev": "nx serve @ask-ell/ask-back-end"
-  },
   "private": true,
   "devDependencies": {
     "@eslint/js": "^9.8.0",

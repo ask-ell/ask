@@ -3,29 +3,118 @@ import { IProject, IProjectConfiguration } from "./types";
 
 export const nxProjectConfiguration: IProjectConfiguration = {
     id: 'nx',
-    name: 'Nx',
     description: 'Nx is a set of extensible dev tools for monorepos, which helps you develop like Google, Facebook, and Microsoft.',
-    tasks: [
+    tools: [
         {
-            id: 'serve',
-            description: "Run services in development mode",
+            name: 'Node.js',
+            url: 'https://nodejs.org/'
+        },
+        {
+            name: 'NPM',
+            url: 'https://www.npmjs.com/'
+        }
+    ],
+    files: [
+        {
+            path: '.ask/secrets.json',
             instructions: [
-                'npm run nx run-many -t serve'
+                'cp -r .ask/secrets.sample.json .ask/secrets.json'
+            ]
+        },
+        {
+            path: 'node_modules/last_install',
+            instructions: [
+                '@ask install'
+            ]
+        },
+        {
+            path: '.ask/build/last_build',
+            instructions: [
+                '@ask build'
             ]
         }
+    ],
+    tasks: [
+        {
+            id: 'install',
+            description: "install dependencies",
+            instructions: [
+                'npm install',
+                'date > node_modules/last_install'
+            ]
+        },
+        {
+            id: 'build',
+            description: "build project",
+            instructions: [
+                './node_modules/.bin/nx build',
+                'date > .ask/build/last_build'
+            ],
+            files: [
+                'node_modules/last_install'
+            ]
+        },
+        {
+            id: 'serve',
+            description: "run services in development mode",
+            instructions: [
+                './node_modules/.bin/nx run-many -t serve'
+            ],
+            files: [
+                '.ask/secrets.json',
+                'node_modules/last_install'
+            ]
+        },
+        {
+            id: 'format',
+            description: "format project",
+            instructions: [
+                './node_modules/.bin/nx format:write'
+            ]
+        },
+        {
+            id: 'lint',
+            description: "lint project",
+            instructions: [
+                './node_modules/.bin/nx lint'
+            ]
+        },
+        {
+            id: 'test',
+            description: "run tests",
+            instructions: [
+                './node_modules/.bin/nx test'
+            ],
+            files: [
+                'node_modules/last_install'
+            ]
+        },
+        {
+            id: 'test:watch',
+            description: "run tests in watch mode",
+            instructions: [
+                'echo \"To test a service in watch mode, run : ask test:watch:one <service identifier> --watch\"'
+            ]
+        },
+        {
+            id: 'clean',
+            description: "clean services cache",
+            instructions: [
+                './node_modules/.bin/nx reset'
+            ]
+        },
     ]
-}
+};
 
-
-export const fakeProject: IProject = {
-    id: 'fake',
+export const askProject: IProject = {
+    id: 'ask',
     configuration: 'nx',
     tasks: [
         {
-            id: 'serve',
-            description: "Say hello",
+            id: 'build:cli',
+            description: "build the CLI",
             instructions: [
-                'echo "Hello, World!"'
+                './node_modules/.bin/nx build cli'
             ]
         }
     ]

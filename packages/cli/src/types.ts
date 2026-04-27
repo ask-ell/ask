@@ -1,18 +1,33 @@
-export interface ITask {
-    id: string;
-    description: string;
+export type Id = string;
+
+
+export interface ITool {
+    name: string;
+    url: string;
+}
+
+export interface IFile {
+    path: string;
     instructions: string[];
 }
 
-export interface IProjectConfiguration {
-    id: string;
-    name: string;
+export interface ITask {
+    id: Id;
     description: string;
-    tasks: ITask[];
+    instructions: string[];
+    files?: string[];
+}
+
+export interface IProjectConfiguration {
+    id: Id;
+    description: string;
+    files?: IFile[];
+    tasks?: ITask[];
+    tools?: ITool[];
 }
 
 export interface IProject {
-    id: string;
-    configuration: string;
-    tasks: ITask[];
+    id: Id;
+    configuration: Id;
+    tasks?: ITask[];
 }
