@@ -5,7 +5,6 @@ import { ITask } from "./types";
 
 
 export class TaskRunner {
-    // TODO: customize logger
     private logger: ILogger = console;
 
     constructor(
