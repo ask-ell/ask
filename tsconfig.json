@@ -2,5 +2,12 @@
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
   "files": [],
-  "references": []
+  "references": [
+    {
+      "path": "./services/back-end-e2e"
+    },
+    {
+      "path": "./services/back-end"
+    }
+  ]
 }
