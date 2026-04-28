@@ -1,11 +1,11 @@
-import { Id } from "../types/id";
+import { IAggregate } from "../types/aggregate.interface";
 import { IFileDTO } from "./file.dto.interface";
 import { ITaskDTO } from "./task.dto.interface";
 import { IToolDTO } from "./toold.dto.interface";
 
 
-export interface IProjectConfigurationDTO {
-    id: Id;
+export interface IProjectConfigurationDTO extends IAggregate<'project-configuration'> {
+    public: boolean;
     description: string;
     files?: IFileDTO[];
     tasks?: ITaskDTO[];

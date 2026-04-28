@@ -3,6 +3,8 @@ import { IProject, IProjectConfiguration } from "@ask-ell/ask-back-end-api";
 
 export const nxProjectConfiguration: IProjectConfiguration = {
     id: 'nx',
+    type: 'project-configuration',
+    public: true,
     description: 'Nx is a set of extensible dev tools for monorepos, which helps you develop like Google, Facebook, and Microsoft.',
     tools: [
         {
@@ -108,7 +110,8 @@ export const nxProjectConfiguration: IProjectConfiguration = {
 };
 
 export const askProject: IProject = {
-    id: 'ask',
+    id: 'ask-ell_governance_ask',
+    type: 'project',
     configuration: 'nx',
     tasks: [
         {
@@ -122,7 +125,8 @@ export const askProject: IProject = {
             id: 'build:cli',
             description: "build the CLI",
             instructions: [
-                './node_modules/.bin/nx build cli'
+                './node_modules/.bin/nx build cli',
+                'mkdir -p tmp/ask'
             ]
         }
     ]
