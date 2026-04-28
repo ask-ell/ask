@@ -14,10 +14,10 @@ export class FullStackUnitOfWork extends UnitOfWork implements IUnitOfWork {
             postgresUri: ''
         });
 
-        const instance: Keyv = new Keyv({ store });
-        this.projectProvider = new KeyvProjectProvider(instance);
-        this.projectRepository = new KeyvProjectRepository(instance);
-        this.projectConfigurationProvider = new KeyvProjectConfigurationProvider(instance);
-        this.projectConfigurationRepository = new KeyvProjectConfigurationRepository(instance);
+        const keyv: Keyv = new Keyv({ store });
+        this.projectProvider = new KeyvProjectProvider(keyv);
+        this.projectRepository = new KeyvProjectRepository(keyv);
+        this.projectConfigurationProvider = new KeyvProjectConfigurationProvider(keyv);
+        this.projectConfigurationRepository = new KeyvProjectConfigurationRepository(keyv);
     }
 }

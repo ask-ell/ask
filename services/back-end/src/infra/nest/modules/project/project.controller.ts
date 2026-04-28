@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from "@nestjs/common";
-import { ApiResponse } from "@nestjs/swagger"
+import { ApiResponse } from "@nestjs/swagger";
 
 import { IProjectController, IProjectDTO } from "@ask-ell/ask-back-end-api";
 
