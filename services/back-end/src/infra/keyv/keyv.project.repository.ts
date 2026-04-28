@@ -6,7 +6,7 @@ import { IProjectDTO } from "@ask-ell/ask-back-end-api";
 import { askProject } from "./data";
 
 
-export class ProjectKeyvRepository extends KeyvAggregateRootRepository<IProjectDTO, IProjectDTO> {
+export class KeyvProjectRepository extends KeyvAggregateRootRepository<IProjectDTO, IProjectDTO> {
     constructor(instance: Keyv<IProjectDTO>) {
         super(instance);
         this.instance.set(askProject.id, askProject);

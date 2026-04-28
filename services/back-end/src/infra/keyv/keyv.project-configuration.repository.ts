@@ -6,7 +6,7 @@ import { IProjectConfigurationDTO } from "@ask-ell/ask-back-end-api";
 import { nxProjectConfiguration } from "./data";
 
 
-export class ProjectConfigurationKeyvRepository extends KeyvAggregateRootRepository<IProjectConfigurationDTO, IProjectConfigurationDTO> {
+export class KeyvProjectConfigurationRepository extends KeyvAggregateRootRepository<IProjectConfigurationDTO, IProjectConfigurationDTO> {
     constructor(instance: Keyv<IProjectConfigurationDTO>) {
         super(instance);
         this.instance.set(nxProjectConfiguration.id, nxProjectConfiguration);
