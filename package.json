@@ -26,6 +26,7 @@
     "jest": "^30.0.2",
     "jest-environment-node": "^30.0.2",
     "jest-util": "^30.0.2",
+    "jsonc-eslint-parser": "^2.1.0",
     "nx": "22.7.0",
     "prettier": "^3.8.1",
     "react-refresh": "^0.10.0",
@@ -38,7 +39,8 @@
   },
   "workspaces": [
     "packages/*",
-    "services/*"
+    "services/*",
+    "libs/*"
   ],
   "description": "<a alt=\"Nx logo\" href=\"https://nx.dev\" target=\"_blank\" rel=\"noreferrer\"><img src=\"https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png\" width=\"45\"></a>",
   "main": "index.js",
