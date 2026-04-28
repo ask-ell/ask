@@ -2,4 +2,5 @@
 
 import { run } from "./infra";
 
-run();
+
+run().catch(console.error);
