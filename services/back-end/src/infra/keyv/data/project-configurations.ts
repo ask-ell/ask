@@ -1,7 +1,7 @@
-import { IProject, IProjectConfiguration } from "@ask-ell/ask-back-end-api";
+import { IProjectConfigurationDTO } from "@ask-ell/ask-back-end-api";
 
 
-export const nxProjectConfiguration: IProjectConfiguration = {
+export const nxProjectConfiguration: IProjectConfigurationDTO = {
     id: 'nx',
     type: 'project-configuration',
     public: true,
@@ -106,28 +106,5 @@ export const nxProjectConfiguration: IProjectConfiguration = {
                 './node_modules/.bin/nx reset'
             ]
         },
-    ]
-};
-
-export const askProject: IProject = {
-    id: 'ask-ell_governance_ask',
-    type: 'project',
-    configuration: 'nx',
-    tasks: [
-        {
-            id: 'post:install',
-            description: "post install task",
-            instructions: [
-                '@ask build:cli'
-            ]
-        },
-        {
-            id: 'build:cli',
-            description: "build the CLI",
-            instructions: [
-                './node_modules/.bin/nx build cli',
-                'mkdir -p tmp/ask'
-            ]
-        }
     ]
 };
