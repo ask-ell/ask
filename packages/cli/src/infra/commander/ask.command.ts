@@ -1,6 +1,6 @@
 import { Command } from "commander";
 
-import { ITaskDTO } from "@ask-ell/back-end-api";
+import { ITaskDTO } from "@ask-ell/ask-back-end-api";
 
 import { RootOptions } from "./types";
 import { TaskRunner } from "../../shared/task.runner";

@@ -1,6 +1,6 @@
 import { MaybeUndefined } from "@ask-ell/core";
 
-import { Id, IProjectDTO, IProjectConfigurationDTO, ITaskDTO } from "@ask-ell/back-end-api";
+import { Id, IProjectDTO, IProjectConfigurationDTO, ITaskDTO } from "@ask-ell/ask-back-end-api";
 
 
 export class TaskSorter {
@@ -8,7 +8,7 @@ export class TaskSorter {
         private project: IProjectDTO,
         private projectConfiguration: IProjectConfigurationDTO
     ){}
-    
+
     getUniqueTasks(): ITaskDTO[] {
         const tasks: Map<Id, ITaskDTO> = new Map();
 

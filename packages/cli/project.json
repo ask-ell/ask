@@ -26,7 +26,11 @@
       }
     },
     "serve": {
-      "executor": "nx:noop"
+      "executor": "@nx/webpack:dev-server",
+      "options": {
+        "buildTarget": "cli:build",
+        "watch": true
+      }
     },
     "chmod": {
       "executor": "nx:run-commands",

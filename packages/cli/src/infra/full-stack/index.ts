@@ -3,7 +3,7 @@ import { mkdir, readFile } from 'node:fs/promises';
 import { HttpClient, ILogger, throwResultError } from '@ask-ell/core';
 import { join } from 'node:path';
 
-import { IProjectConfigurationDTO, IProjectDTO, ITaskDTO, PartialAggregate } from '@ask-ell/back-end-api';
+import { IProjectConfigurationDTO, IProjectDTO, ITaskDTO, PartialAggregate } from '@ask-ell/ask-back-end-api';
 
 import { AskCommand } from '../commander';
 import { TaskSorter } from '../../shared/task.sorter';
