@@ -1,1 +1,1 @@
-export * from "./nest";
+export * from "./full-stack";
