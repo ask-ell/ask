@@ -3,7 +3,7 @@ import { KeyvAggregateRootRepository } from "@ask-ell/keyv";
 
 import { IProjectConfigurationDTO } from "@ask-ell/ask-back-end-api";
 
-import { nxProjectConfiguration } from "./data/project-configurations";
+import { nxProjectConfiguration } from "./data";
 
 
 export class ProjectConfigurationKeyvRepository extends KeyvAggregateRootRepository<IProjectConfigurationDTO, IProjectConfigurationDTO> {

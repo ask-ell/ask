@@ -3,7 +3,7 @@ import { KeyvAggregateRootRepository } from "@ask-ell/keyv";
 
 import { IProjectDTO } from "@ask-ell/ask-back-end-api";
 
-import { askProject } from "./data/projects";
+import { askProject } from "./data";
 
 
 export class ProjectKeyvRepository extends KeyvAggregateRootRepository<IProjectDTO, IProjectDTO> {
