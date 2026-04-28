@@ -1,14 +1,14 @@
 import { ILogger } from "@ask-ell/core";
 import { execSync } from "node:child_process";
 
-import { ITask } from "./types";
+import { ITaskDTO } from "@ask-ell/ask-back-end-api";
 
 
 export class TaskRunner {
     private logger: ILogger = console;
 
     constructor(
-        private task: ITask
+        private task: ITaskDTO
     ) {}
 
     run(): void {

@@ -1,4 +1,4 @@
-import { IProject, IProjectConfiguration } from "./types";
+import { IProject, IProjectConfiguration } from "@ask-ell/ask-back-end-api";
 
 
 export const nxProjectConfiguration: IProjectConfiguration = {
@@ -28,7 +28,7 @@ export const nxProjectConfiguration: IProjectConfiguration = {
             ]
         },
         {
-            path: '.ask/build/last_build',
+            path: 'dist/last_build',
             instructions: [
                 '@ask build'
             ]
@@ -48,12 +48,13 @@ export const nxProjectConfiguration: IProjectConfiguration = {
             description: "build project",
             instructions: [
                 './node_modules/.bin/nx build',
-                'date > .ask/build/last_build'
+                'date > dist/last_build'
             ],
             files: [
                 'node_modules/last_install'
             ]
         },
+        // TODO: add 'nx' command
         {
             id: 'serve',
             description: "run services in development mode",
@@ -122,27 +123,6 @@ export const askProject: IProject = {
             description: "build the CLI",
             instructions: [
                 './node_modules/.bin/nx build cli'
-            ]
-        },
-        {
-            id: 'pre:hello',
-            description: "pre hello task",
-            instructions: [
-                'echo \"This is a pre-hook for the hello task!\"'
-            ]
-        },
-        {
-            id: 'hello',
-            description: "Just say 'hello'",
-            instructions: [
-                'echo \"Hello from ASK!\"'
-            ]
-        },
-        {
-            id: 'post:hello',
-            description: "post hello task",
-            instructions: [
-                'echo \"This is a post-hook for the hello task!\"'
             ]
         }
     ]

@@ -1,15 +1,16 @@
 import { Command } from "commander";
 
-import { ITask } from "../../shared/types";
+import { ITaskDTO } from "@ask-ell/ask-back-end-api";
+
 import { TaskRunner } from "../../shared/task.runner";
 
 
 export class AskCommand extends Command {
     constructor(
-        tasks: ITask[]
+        tasks: ITaskDTO[]
     ) {
         super('ask');
-        tasks.forEach((task: ITask): void => {
+        tasks.forEach((task: ITaskDTO): void => {
             const taskRunner: TaskRunner = new TaskRunner(task);
             this.command(task.id)
                 .description(task.description)

@@ -1,31 +1,31 @@
 import { MaybeUndefined } from "@ask-ell/core";
 
-import { Id, IProject, IProjectConfiguration, ITask } from "./types";
+import { Id, IProjectDTO, IProjectConfigurationDTO, ITaskDTO } from "@ask-ell/back-end-api";
 
 
 export class TaskSorter {
     constructor(
-        private project: IProject,
-        private projectConfiguration: IProjectConfiguration
+        private project: IProjectDTO,
+        private projectConfiguration: IProjectConfigurationDTO
     ){}
     
-    getUniqueTasks(): ITask[] {
-        const tasks: Map<Id, ITask> = new Map();
+    getUniqueTasks(): ITaskDTO[] {
+        const tasks: Map<Id, ITaskDTO> = new Map();
 
-        this.project.tasks?.forEach((task: ITask): void => {
+        this.project.tasks?.forEach((task: ITaskDTO): void => {
             task.description = `${task.description} <- *`;
             tasks.set(task.id, task);
         });
     
-        this.projectConfiguration.tasks?.forEach((task: ITask): void => {
+        this.projectConfiguration.tasks?.forEach((task: ITaskDTO): void => {
             task.description = `${task.description} <- ${this.projectConfiguration.id}`;
             tasks.set(task.id, task);
         });
     
-        tasks.forEach((task: ITask): void => {
+        tasks.forEach((task: ITaskDTO): void => {
             if(task.id.includes('pre:')) {
                 const nextTaskId: Id = task.id.split('pre:')[1];
-                const nextTask: MaybeUndefined<ITask> = tasks.get(nextTaskId);
+                const nextTask: MaybeUndefined<ITaskDTO> = tasks.get(nextTaskId);
                 if(nextTask) {
                     nextTask.instructions = [...task.instructions, ...nextTask.instructions];
                     tasks.set(nextTaskId, nextTask);

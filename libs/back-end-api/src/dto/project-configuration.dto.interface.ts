@@ -4,7 +4,7 @@ import { ITaskDTO } from "./task.dto.interface";
 import { IToolDTO } from "./toold.dto.interface";
 
 
-export interface IProjectConfiguration {
+export interface IProjectConfigurationDTO {
     id: Id;
     description: string;
     files?: IFileDTO[];

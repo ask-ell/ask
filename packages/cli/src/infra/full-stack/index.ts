@@ -1,6 +1,7 @@
+import { IProject, IProjectConfiguration, ITask } from '@ask-ell/ask-back-end-api';
+
 import { askProject, nxProjectConfiguration } from '../../shared/data';
 import { TaskSorter } from '../../shared/task.sorter';
-import { IProject, IProjectConfiguration, ITask } from '../../shared/types';
 import { AskCommand } from '../commander';
 
 
