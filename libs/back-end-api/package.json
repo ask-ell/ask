@@ -1,5 +1,5 @@
 {
-  "name": "@ask-ell/back-end-api",
+  "name": "@ask-ell/ask-back-end-api",
   "version": "0.0.1",
   "private": true,
   "type": "module",
