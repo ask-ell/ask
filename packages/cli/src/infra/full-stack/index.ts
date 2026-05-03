@@ -5,8 +5,7 @@ import { join } from 'node:path';
 import { IProjectConfigurationDTO, IProjectDTO, ITaskDTO, PartialAggregate } from '@ask-ell/ask-back-end-api';
 
 import { AskCommand, RunCommand } from '../commander';
-import { TaskSorter } from '../../shared/task.sorter';
-import { TaskRunner } from '../../shared/task.runner';
+import { TaskRunner, TaskSorter } from '../../shared/task';
 import { createDirectoryIfNotExists } from '../../shared/directory';
 
 
