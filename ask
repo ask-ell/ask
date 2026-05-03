@@ -2,4 +2,4 @@
 
 chmod +x ./dist/packages/cli/main.js
 
-./dist/packages/cli/main.js --storage tmp/ask "$@"
+./dist/packages/cli/main.js --storage tmp/ask --remote localhost:3000 --fixtures fixtures.json "$@"
