@@ -7,7 +7,6 @@ type DirectoryCreator = (path: string) => Promise<void>;
 
 export const createDirectoryIfNotExists = (logger: ILogger): DirectoryCreator => async (path: string): Promise<void> => {
     if (existsSync(path)) {
-        logger.info(`Directory already exists at path "${path}"`);
         return Promise.resolve();
     }
 

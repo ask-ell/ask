@@ -6,6 +6,21 @@
         "token": "test"
     },
     {
+        "id": "private",
+        "type": "project-configuration",
+        "accounts": [
+            {
+                "id": "test",
+                "permissions": [
+                    "get",
+                    "post",
+                    "put",
+                    "delete"
+                ]
+            }
+        ]
+    },
+    {
         "id": "nx",
         "type": "project-configuration",
         "description": "Nx is a set of extensible dev tools for monorepos, which helps you develop like Google, Facebook, and Microsoft.",
@@ -53,7 +68,7 @@
                 "id": "build",
                 "description": "build project",
                 "instructions": [
-                    "./node_modules/.bin/nx build",
+                    "nx build",
                     "date > dist/last_build"
                 ],
                 "files": [
@@ -64,7 +79,7 @@
                 "id": "serve",
                 "description": "run services in development mode",
                 "instructions": [
-                    "./node_modules/.bin/nx run-many -t serve"
+                    "nx run-many -t serve"
                 ],
                 "files": [
                     ".ask/secrets.json",
@@ -75,21 +90,21 @@
                 "id": "format",
                 "description": "format project",
                 "instructions": [
-                    "./node_modules/.bin/nx format:write"
+                    "nx format:write"
                 ]
             },
             {
                 "id": "lint",
                 "description": "lint project",
                 "instructions": [
-                    "./node_modules/.bin/nx lint"
+                    "nx lint"
                 ]
             },
             {
                 "id": "test",
                 "description": "run tests",
                 "instructions": [
-                    "./node_modules/.bin/nx test"
+                    "nx test"
                 ],
                 "files": [
                     "node_modules/last_install"
@@ -106,7 +121,7 @@
                 "id": "clean",
                 "description": "clean services cache",
                 "instructions": [
-                    "./node_modules/.bin/nx reset"
+                    "nx reset"
                 ]
             }
         ]

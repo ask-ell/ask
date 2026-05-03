@@ -1,25 +1,28 @@
 import { MaybeUndefined } from "@ask-ell/core";
 
 import { Id, IProjectDTO, IProjectConfigurationDTO, ITaskDTO } from "@ask/back-end-api";
+import { addStyleToDescription } from "./utils";
 
 
 type GetUniqueTasksDTO = {
     project: IProjectDTO;
-    projectConfiguration: IProjectConfigurationDTO;
+    projectConfigurations?: IProjectConfigurationDTO[];
 }
 
 export class TaskSorter {
-    getUniqueTasks({ project, projectConfiguration }: GetUniqueTasksDTO): ITaskDTO[] {
+    getUniqueTasks({ project, projectConfigurations }: GetUniqueTasksDTO): ITaskDTO[] {
         const tasks: Map<Id, ITaskDTO> = new Map();
 
         project.tasks?.forEach((task: ITaskDTO): void => {
-            task.description = `${task.description} <- *`;
+            task.description = addStyleToDescription(task);
             tasks.set(task.id, task);
         });
     
-        projectConfiguration.tasks?.forEach((task: ITaskDTO): void => {
-            task.description = `${task.description} <- ${projectConfiguration.id}`;
-            tasks.set(task.id, task);
+        projectConfigurations?.forEach((projectConfiguration: IProjectConfigurationDTO): void => {
+            projectConfiguration.tasks?.forEach((task: ITaskDTO): void => {
+                task.description = addStyleToDescription(task);
+                tasks.set(task.id, task);
+            });
         });
     
         tasks.forEach((task: ITaskDTO): void => {
