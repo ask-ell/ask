@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { HttpClient, ILogger, throwResultError } from '@ask-ell/core';
 import { join } from 'node:path';
 
-import { IProjectConfigurationDTO, IProjectDTO, ITaskDTO, PartialAggregate } from '@ask-ell/ask-back-end-api';
+import { IProjectConfigurationDTO, IProjectDTO, ITaskDTO, PartialAggregate } from '@ask/back-end-api';
 
 import { AskCommand, RunCommand } from '../commander';
 import { TaskRunner, TaskSorter } from '../../shared/task';

@@ -1,7 +1,7 @@
 import { ILogger } from "@ask-ell/core";
 import { execSync } from "node:child_process";
 
-import { ITaskDTO } from "@ask-ell/ask-back-end-api";
+import { ITaskDTO } from "@ask/back-end-api";
 
 
 export class TaskRunner {

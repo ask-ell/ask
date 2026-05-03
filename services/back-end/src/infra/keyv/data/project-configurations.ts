@@ -1,4 +1,4 @@
-import { IProjectConfigurationDTO } from "@ask-ell/ask-back-end-api";
+import { IProjectConfigurationDTO } from "@ask/back-end-api";
 
 
 export const nxProjectConfiguration: IProjectConfigurationDTO = {

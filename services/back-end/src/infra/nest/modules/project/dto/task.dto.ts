@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-import { ITaskDTO } from "@ask-ell/ask-back-end-api";
+import { ITaskDTO } from "@ask/back-end-api";
 
 
 export class TaskDTO implements ITaskDTO {

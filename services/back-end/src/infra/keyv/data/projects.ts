@@ -1,4 +1,4 @@
-import { IProjectDTO } from "@ask-ell/ask-back-end-api";
+import { IProjectDTO } from "@ask/back-end-api";
 
 
 export const askProject: IProjectDTO = {

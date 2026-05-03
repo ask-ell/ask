@@ -1,7 +1,7 @@
 import Keyv from "keyv";
 import { KeyvAggregateRootRepository } from "@ask-ell/keyv";
 
-import { IProjectConfigurationDTO } from "@ask-ell/ask-back-end-api";
+import { IProjectConfigurationDTO } from "@ask/back-end-api";
 
 import { nxProjectConfiguration } from "./data";
 

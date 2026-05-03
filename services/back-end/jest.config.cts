@@ -10,7 +10,7 @@ const swcJestConfig = JSON.parse(
 swcJestConfig.swcrc = false;
 
 module.exports = {
-  displayName: '@ask-ell/ask-back-end',
+  displayName: '@ask/back-end',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

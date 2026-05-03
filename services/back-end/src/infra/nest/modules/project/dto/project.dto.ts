@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { Id, IProjectDTO, ITaskDTO } from '@ask-ell/ask-back-end-api';
+import { Id, IProjectDTO, ITaskDTO } from '@ask/back-end-api';
+
 import { TaskDTO } from './task.dto';
 
 

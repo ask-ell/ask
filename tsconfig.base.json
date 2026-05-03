@@ -18,7 +18,7 @@
     "strict": true,
     "target": "es2022",
     "paths": {
-      "@ask-ell/ask-back-end-api": ["libs/back-end-api/src/index.ts"]
+      "@ask/back-end-api": ["libs/back-end-api/src/index.ts"]
     }
   }
 }

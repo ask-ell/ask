@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 
-import { Id, IProjectDTO } from "@ask-ell/ask-back-end-api";
+import { Id, IProjectDTO } from "@ask/back-end-api";
 
 import { UNIT_OF_WORK_PROVIDER } from "../../config/providers";
 import type { IUnitOfWork } from "../../../../shared/unit-of-work";
