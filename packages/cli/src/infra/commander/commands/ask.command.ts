@@ -9,7 +9,8 @@ export class AskCommand extends Command {
         this
             .option('-s, --storage [PATH]', 'Storage directory path', '$HOME/.ask') // TODO: make creating it in home directory
             .option('-r, --remote [HOST]', 'Remote host')
-            .option('-f, --fixtures [PATH]', 'Fixtures file path');
+            .option('-l, --log [LEVEL]', 'Logger level')
+            .allowExcessArguments();
     }
 
     getRootOptions(): RootOptions {
