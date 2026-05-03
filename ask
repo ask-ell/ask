@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
+chmod +x ./dist/packages/cli/main.js
+
 ./dist/packages/cli/main.js --storage tmp/ask "$@"
