@@ -1,25 +1,26 @@
-import { existsSync } from 'node:fs';
-import { mkdir, readFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { HttpClient, ILogger, throwResultError } from '@ask-ell/core';
 import { join } from 'node:path';
 
 import { IProjectConfigurationDTO, IProjectDTO, ITaskDTO, PartialAggregate } from '@ask-ell/ask-back-end-api';
 
-import { AskCommand } from '../commander';
+import { AskCommand, RunCommand } from '../commander';
 import { TaskSorter } from '../../shared/task.sorter';
+import { TaskRunner } from '../../shared/task.runner';
+import { createDirectoryIfNotExists } from '../../shared/directory';
 
 
 export const run = async (): Promise<void> => {
     const logger: ILogger = console;
-    const command = new AskCommand();
+    const taskRunner: TaskRunner = new TaskRunner(logger);
+    const askCommand: AskCommand = new AskCommand();
+    const runCommand: RunCommand = new RunCommand();
+    const taskSorter: TaskSorter = new TaskSorter();
 
-    command.parse(process.argv);
+    askCommand.parse(process.argv);
 
-    const { storage } = command.getRootOptions();
-    if(!existsSync(storage)) {
-        await mkdir(storage, { recursive: true });
-        logger.info(`Storage folder created at path "${storage}"`);
-    }
+    const { storage } = askCommand.getRootOptions();
+    await createDirectoryIfNotExists(logger)(storage);
 
     const askFileStringified: string = await readFile(join(process.cwd(), 'ask.json'), 'utf-8');
     const partialProject: PartialAggregate<IProjectDTO> = JSON.parse(askFileStringified);
@@ -41,8 +42,12 @@ export const run = async (): Promise<void> => {
 
     // TODO: store in cache
 
-    const tasks: ITaskDTO[] = new TaskSorter(project, projectConfiguration).getUniqueTasks();
-    command.setTasks(tasks);
+    const tasks: ITaskDTO[] = taskSorter.getUniqueTasks({ project, projectConfiguration });
+    tasks.forEach((task: ITaskDTO): void => {
+        runCommand.command(task.id)
+            .description(task.description)
+            .action((): void => taskRunner.run(task));
+    });
 
-    command.parse(process.argv);
+    runCommand.parse(process.argv);
 };

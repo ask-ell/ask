@@ -3,22 +3,22 @@ import { MaybeUndefined } from "@ask-ell/core";
 import { Id, IProjectDTO, IProjectConfigurationDTO, ITaskDTO } from "@ask-ell/ask-back-end-api";
 
 
-export class TaskSorter {
-    constructor(
-        private project: IProjectDTO,
-        private projectConfiguration: IProjectConfigurationDTO
-    ){}
+type GetUniqueTasksDTO = {
+    project: IProjectDTO;
+    projectConfiguration: IProjectConfigurationDTO;
+}
 
-    getUniqueTasks(): ITaskDTO[] {
+export class TaskSorter {
+    getUniqueTasks({ project, projectConfiguration }: GetUniqueTasksDTO): ITaskDTO[] {
         const tasks: Map<Id, ITaskDTO> = new Map();
 
-        this.project.tasks?.forEach((task: ITaskDTO): void => {
+        project.tasks?.forEach((task: ITaskDTO): void => {
             task.description = `${task.description} <- *`;
             tasks.set(task.id, task);
         });
     
-        this.projectConfiguration.tasks?.forEach((task: ITaskDTO): void => {
-            task.description = `${task.description} <- ${this.projectConfiguration.id}`;
+        projectConfiguration.tasks?.forEach((task: ITaskDTO): void => {
+            task.description = `${task.description} <- ${projectConfiguration.id}`;
             tasks.set(task.id, task);
         });
     

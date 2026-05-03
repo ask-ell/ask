@@ -5,14 +5,12 @@ import { ITaskDTO } from "@ask-ell/ask-back-end-api";
 
 
 export class TaskRunner {
-    private logger: ILogger = console;
-
     constructor(
-        private task: ITaskDTO
+        private logger: ILogger
     ) {}
 
-    run(): void {
-        this.task.instructions.forEach((instruction: string): void => {
+    run(task: ITaskDTO): void {
+        task.instructions.forEach((instruction: string): void => {
             if(instruction.includes('@ask')){
                 instruction = instruction.replace('@ask', process.argv[1]);
             }
