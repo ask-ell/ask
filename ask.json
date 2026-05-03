@@ -9,7 +9,7 @@
             "id": "post:install",
             "description": "post install task",
             "instructions": [
-                "@ask build:cli"
+                "@ask run build:cli"
             ]
         },
         {
