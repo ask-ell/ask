@@ -3,6 +3,6 @@ import { ITaskDTO } from "./task.dto.interface";
 
 
 export interface IProjectDTO {
-    extends: IProjectConfigurationPartialDTO[]
+    extends?: IProjectConfigurationPartialDTO[]
     tasks?: ITaskDTO[];
 }
