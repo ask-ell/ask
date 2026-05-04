@@ -7,10 +7,11 @@ import { IProjectConfigurationDTO, IProjectConfigurationPartialDTO, IProjectDTO,
 import { AskCommand, RunCommand, TaskCommand } from '../commander';
 import { TaskRunner, TaskSorter } from '../../shared/task';
 import { createDirectoryIfNotExists } from '../../shared/directory';
+import { SignaleLogger } from '../signale';
 
 
 export const run = async (): Promise<void> => {
-    const logger: ILogger = console; // TODO: improve logger
+    const logger: ILogger = new SignaleLogger();
     const taskRunner: TaskRunner = new TaskRunner(logger);
     const runCommand: RunCommand = new RunCommand();
     const askCommand: AskCommand = new AskCommand();
