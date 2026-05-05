@@ -1,7 +1,7 @@
 import { MaybeUndefined } from "@ask-ell/core";
 
 import { Id, IProjectDTO, IProjectConfigurationDTO, ITaskDTO } from "@ask/back-end-api";
-import { addStyleToDescription } from "./utils";
+import { addStyleToDescription } from "../task";
 
 
 type GetUniqueTasksDTO = {

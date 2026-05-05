@@ -1,6 +1,6 @@
 import { Command } from "commander";
 
-import { RootOptions } from "../../../shared/root-options";
+import { RootOptions } from "../types";
 
 
 export class AskCommand extends Command {

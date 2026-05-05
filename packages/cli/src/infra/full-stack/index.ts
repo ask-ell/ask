@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { IProjectConfigurationDTO, IProjectConfigurationPartialDTO, IProjectDTO, ITaskDTO } from '@ask/back-end-api';
 
 import { AskCommand, RunCommand, TaskCommand } from '../commander';
-import { TaskRunner, TaskSorter } from '../../shared/task';
+import { TaskRunner, TaskSorter } from '../../shared/tasks';
 import { createDirectoryIfNotExists } from '../../shared/directory';
 import { SignaleLogger } from '../signale';
 

@@ -2,7 +2,7 @@ import { Command } from "commander";
 
 import { ITaskDTO } from "@ask/back-end-api";
 
-import { TaskRunner } from "../../../shared/task";
+import { TaskRunner } from "../../../shared/tasks";
 
 
 export class TaskCommand extends Command {
