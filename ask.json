@@ -9,15 +9,15 @@
             "id": "post:install",
             "description": "post install task",
             "instructions": [
-                "@ask run build:cli"
+                "@ask run build:cli",
+                "mkdir -p tmp/ask"
             ]
         },
         {
             "id": "build:cli",
             "description": "build the CLI",
             "instructions": [
-                "nx build cli",
-                "mkdir -p tmp/ask"
+                "nx build cli"
             ]
         }
     ]
