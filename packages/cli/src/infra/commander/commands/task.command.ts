@@ -2,7 +2,7 @@ import { Command } from "commander";
 
 import { ITaskDTO } from "@ask/back-end-api";
 
-import { TaskRunner } from "../../../shared/tasks";
+import { TaskRunner } from "../../../shared/task";
 
 
 export class TaskCommand extends Command {
@@ -14,6 +14,6 @@ export class TaskCommand extends Command {
     }
 
     setTaskRunner(taskRunner: TaskRunner): this {
-        return this.action((): void => taskRunner.run(this.task));
+        return this.action((): void => taskRunner(this.task));
     }
 }
