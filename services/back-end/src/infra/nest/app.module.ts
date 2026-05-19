@@ -1,11 +1,11 @@
 import { Global, Module } from '@nestjs/common';
 import { ApplicationBase } from '@ask-ell/back-end';
 
-import { ProjectConfigurationModule } from './modules';
+import { FixtureModule, ProjectConfigurationModule } from './modules';
 
 
 @Global()
 @Module({
-    imports: [ProjectConfigurationModule]
+    imports: [ProjectConfigurationModule, FixtureModule]
 })
 export class AppModule extends ApplicationBase {}

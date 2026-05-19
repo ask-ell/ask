@@ -5,5 +5,5 @@ export * from './dto/project.dto.interface';
 export * from './dto/project-configuration.dto.interface';
 export * from './dto/project-configuration.partial.dto.interface';
 export * from './dto/toold.dto.interface';
+export * from './types/aggregate.interface';
 export * from './types/id';
-export * from './types/partial.aggregate';

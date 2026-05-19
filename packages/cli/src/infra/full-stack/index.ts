@@ -27,9 +27,10 @@ export const run = async (): Promise<void> => {
     const { storage } = askCommand.getRootOptions();
     await createDirectoryIfNotExists(logger)(storage);
 
-    const projectFileContent: string = await readFile(join(process.cwd(), 'ask.json'), 'utf-8');
-
-    const project: IProjectDTO = JSON.parse(projectFileContent);
+    
+    const project: IProjectDTO = JSON.parse(
+        await readFile(join(process.cwd(), 'ask.json'), 'utf-8')
+    );
     // TODO: check data format
 
     const tasks: ITaskDTO[] = await getProjectTasks({
