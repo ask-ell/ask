@@ -37,21 +37,21 @@ export class FixtureService {
         }
 
         await Promise.all(
-            fixtures.map((fixture: Fixture): Promise<void> => {
+            fixtures.map(async (fixture: Fixture): Promise<void> => {
+                await Promise.resolve();
                 if(fixture.type === "project-configuration") {
                     return this.persistProjectConfiguration(fixture);
                 }
-                return Promise.resolve()
             })
         )
     }
 
     private async persistProjectConfiguration(fixture: IProjectConfigurationDTO): Promise<void> {
-        const isFixtureAlreadySaved: boolean = await this.unitOfWork.getProjectConfigurationRepository().updateOne(fixture);
-        if(isFixtureAlreadySaved) {
-            return this.logger.info(`Fixture "${fixture.id}" already saved and has been updated`);
+        const isProjectConfigurationAlreadyExists: boolean = await this.unitOfWork.getProjectConfigurationRepository().updateOne(fixture);
+        if(isProjectConfigurationAlreadyExists) {
+            return this.logger.info(`Project configuration "${fixture.id}" already saved and updated`);
         }
         await this.unitOfWork.getProjectConfigurationRepository().save(fixture);
-        this.logger.info(`Fixture "${fixture.id}" saved`);
+        return this.logger.info(`Project configuration "${fixture.id}" saved`);
     }
 }
