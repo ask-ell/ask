@@ -1,131 +1,97 @@
 [
-    {
+  {
+    "id": "test",
+    "type": "account",
+    "username": "test",
+    "token": "test"
+  },
+  {
+    "id": "private",
+    "version": "latest",
+    "type": "project-configuration",
+    "accounts": [
+      {
         "id": "test",
-        "type": "account",
-        "username": "test",
-        "token": "test"
-    },
-    {
-        "id": "private",
-        "version": "latest",
-        "type": "project-configuration",
-        "accounts": [
-            {
-                "id": "test",
-                "permissions": [
-                    "get",
-                    "post",
-                    "put",
-                    "delete"
-                ]
-            }
+        "permissions": ["get", "post", "put", "delete"]
+      }
+    ]
+  },
+  {
+    "id": "nx",
+    "version": "latest",
+    "type": "project-configuration",
+    "description": "Nx is a set of extensible dev tools for monorepos, which helps you develop like Google, Facebook, and Microsoft.",
+    "public": true,
+    "tools": [
+      {
+        "name": "Node.js",
+        "url": "https://nodejs.org/"
+      },
+      {
+        "name": "NPM",
+        "url": "https://www.npmjs.com/"
+      }
+    ],
+    "files": [
+      {
+        "path": ".ask/secrets.json",
+        "instructions": ["cp -r .ask/secrets.sample.json .ask/secrets.json"]
+      },
+      {
+        "path": ".ask/last_install",
+        "instructions": ["@ask install"]
+      },
+      {
+        "path": ".ask/last_build",
+        "instructions": ["@ask build"]
+      }
+    ],
+    "tasks": [
+      {
+        "id": "install",
+        "description": "install dependencies",
+        "instructions": ["npm install", "date > .ask/last_install"]
+      },
+      {
+        "id": "build",
+        "description": "build project",
+        "instructions": ["nx run-many -t build", "date > .ask/last_build"],
+        "files": [".ask/last_install"]
+      },
+      {
+        "id": "serve",
+        "description": "run services in development mode",
+        "instructions": ["nx run-many -t serve"],
+        "files": [".ask/secrets.json", ".ask/last_install"]
+      },
+      {
+        "id": "format",
+        "description": "format project",
+        "instructions": ["nx format:write"]
+      },
+      {
+        "id": "lint",
+        "description": "lint project",
+        "instructions": ["nx lint"]
+      },
+      {
+        "id": "test",
+        "description": "run tests",
+        "instructions": ["nx test"],
+        "files": [".ask/last_install"]
+      },
+      {
+        "id": "test:watch",
+        "description": "run tests in watch mode",
+        "instructions": [
+          "echo \"To test a service in watch mode, run : ask test:watch:one <service identifier> --watch\""
         ]
-    },
-    {
-        "id": "nx",
-        "version": "latest",
-        "type": "project-configuration",
-        "description": "Nx is a set of extensible dev tools for monorepos, which helps you develop like Google, Facebook, and Microsoft.",
-        "public": true,
-        "tools": [
-            {
-                "name": "Node.js",
-                "url": "https://nodejs.org/"
-            },
-            {
-                "name": "NPM",
-                "url": "https://www.npmjs.com/"
-            }
-        ],
-        "files": [
-            {
-                "path": ".ask/secrets.json",
-                "instructions": [
-                    "cp -r .ask/secrets.sample.json .ask/secrets.json"
-                ]
-            },
-            {
-                "path": "node_modules/last_install",
-                "instructions": [
-                    "@ask install"
-                ]
-            },
-            {
-                "path": "dist/last_build",
-                "instructions": [
-                    "@ask build"
-                ]
-            }
-        ],
-        "tasks": [
-            {
-                "id": "install",
-                "description": "install dependencies",
-                "instructions": [
-                    "npm install",
-                    "date > node_modules/last_install"
-                ]
-            },
-            {
-                "id": "build",
-                "description": "build project",
-                "instructions": [
-                    "nx build",
-                    "date > dist/last_build"
-                ],
-                "files": [
-                    "node_modules/last_install"
-                ]
-            },
-            {
-                "id": "serve",
-                "description": "run services in development mode",
-                "instructions": [
-                    "nx run-many -t serve"
-                ],
-                "files": [
-                    ".ask/secrets.json",
-                    "node_modules/last_install"
-                ]
-            },
-            {
-                "id": "format",
-                "description": "format project",
-                "instructions": [
-                    "nx format:write"
-                ]
-            },
-            {
-                "id": "lint",
-                "description": "lint project",
-                "instructions": [
-                    "nx lint"
-                ]
-            },
-            {
-                "id": "test",
-                "description": "run tests",
-                "instructions": [
-                    "nx test"
-                ],
-                "files": [
-                    "node_modules/last_install"
-                ]
-            },
-            {
-                "id": "test:watch",
-                "description": "run tests in watch mode",
-                "instructions": [
-                    "echo \"To test a service in watch mode, run : ask test:watch:one <service identifier> --watch\""
-                ]
-            },
-            {
-                "id": "clean",
-                "description": "clean services cache",
-                "instructions": [
-                    "nx reset"
-                ]
-            }
-        ]
-    }
+      },
+      {
+        "id": "clean",
+        "description": "clean services cache",
+        "instructions": ["nx reset"]
+      }
+    ]
+  }
 ]

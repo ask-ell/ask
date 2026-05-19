@@ -1,6 +1,6 @@
 networks:
   default:
-    driver: "overlay"
+    driver: 'overlay'
 
   public-proxy:
     external: true
@@ -11,8 +11,8 @@ secrets:
 
 services:
   back-end:
-    image: ask-ell/ask-back-end:develop
+    image: ask/back-end:develop
     networks:
-    - default
+      - default
     secrets:
-    - ask
+      - ask
