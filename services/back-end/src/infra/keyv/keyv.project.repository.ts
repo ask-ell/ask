@@ -1,6 +1,6 @@
 import { KeyvAggregateRootRepository } from "@ask-ell/keyv";
 
-import { IProjectDTO } from "@ask/back-end-api";
+import { IProjectDTO } from "@ask-ell/back-end-lib";
 
 
 export class KeyvProjectRepository extends KeyvAggregateRootRepository<IProjectDTO, IProjectDTO> {

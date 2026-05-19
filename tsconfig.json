@@ -1,19 +1,5 @@
 {
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
-  "files": [],
-  "references": [
-    {
-      "path": "./services/back-end-e2e"
-    },
-    {
-      "path": "./services/back-end"
-    },
-    {
-      "path": "./packages/cli"
-    },
-    {
-      "path": "./libs/back-end-api"
-    }
-  ]
+  "files": []
 }
