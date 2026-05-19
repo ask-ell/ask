@@ -22,6 +22,8 @@ export const run = async (): Promise<void> => {
         logger
     });
 
+    askCommand.parse(process.argv);
+
     const { storage } = askCommand.getRootOptions();
     await createDirectoryIfNotExists(logger)(storage);
 
