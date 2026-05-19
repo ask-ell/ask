@@ -7,6 +7,8 @@ import { ProjectConfigurationProvider } from "./project-configuration";
 
 type TaskProvider<Args extends any[]> = (...args: Args) => Promise<ITaskDTO[]>;
 
+const addStyleToDescription = (origin: string) => ({ description }: ITaskDTO): string => description ? `${description} <- ${origin}` : `<- ${origin}`;
+
 export const getProjectTasks = ({
     projectConfigurationProvider
 }: {
@@ -15,6 +17,7 @@ export const getProjectTasks = ({
     const tasks: Map<Id, ITaskDTO> = new Map();
 
     project.tasks?.forEach((task: ITaskDTO): void => {
+        task.description = addStyleToDescription('*')(task);
         tasks.set(task.id, task);
     });
 
@@ -22,6 +25,7 @@ export const getProjectTasks = ({
 
     projectConfigurations?.forEach((projectConfiguration: IProjectConfigurationDTO): void => {
         projectConfiguration.tasks?.forEach((task: ITaskDTO): void => {
+            task.description = addStyleToDescription(projectConfiguration.id)(task);
             tasks.set(task.id, task);
         });
     });
@@ -64,5 +68,3 @@ export const runTask = ({
         logger.info(`Task completed !`);
     });
 };
-
-export const addStyleToDescription = ({ description }: ITaskDTO): string => description ? `${description} <- *` : '<- *';

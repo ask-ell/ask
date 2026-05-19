@@ -1,4 +1,5 @@
-import { HttpClient, ILogger, IResult, fail } from "@ask-ell/core";
+import { HttpClient, ILogger, IResult, fail, success } from "@ask-ell/core";
+
 import { IProjectConfigurationDTO, IProjectConfigurationPartialDTO, IProjectDTO } from "@ask/back-end-api";
 
 
@@ -31,8 +32,11 @@ export const getProjectConfigurations = ({
                 }
 
                 const projectConfigurationFetchingResult: IResult<IProjectConfigurationDTO> = await HttpClient
-                    .get<IProjectConfigurationDTO>({
+                    .get<{data: IProjectConfigurationDTO}>({ // TODO: add as type ?
                         url: new URL(path, remoteUrl)
+                    })
+                    .then((response:  IResult<{data: IProjectConfigurationDTO}>): IResult<IProjectConfigurationDTO> =>{
+                        return success(response.getData()!.data);
                     })
                     .catch((error: any): IResult => {
                         return fail(error);
