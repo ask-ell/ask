@@ -1,4 +1,4 @@
-export * from './controllers/project.controller.interface';
+export * from './controllers/project-configuration.controller.interface';
 export * from './dto/file.dto.interface';
 export * from './dto/task.dto.interface';
 export * from './dto/project.dto.interface';

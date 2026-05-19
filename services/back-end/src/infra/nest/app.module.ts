@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { ApplicationBase } from '@ask-ell/back-end';
 
-import { ProjectConfigurationModule } from './modules/project-configuration';
+import { ProjectConfigurationModule } from './modules';
 
 
 @Global()

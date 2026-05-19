@@ -39,7 +39,8 @@ export const getProjectConfigurations = ({
                     });
 
                 if(projectConfigurationFetchingResult.isAFail()) {
-                    logger.error(`Error for project configuration "${id}" : ${projectConfigurationFetchingResult.getError().message}`);
+                    const errorMessage: string = (projectConfigurationFetchingResult.getError() as any).data.message;
+                    logger.error(`Error for project configuration "${id}" : ${errorMessage}`);
                 }
 
                 return projectConfigurationFetchingResult;
