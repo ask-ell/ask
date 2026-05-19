@@ -12,6 +12,7 @@ export class KeyvProjectConfigurationRepository extends KeyvAggregateRootReposit
     protected override purgeData({
         id,
         type,
+        version,
         description,
         public: _public,
         files,
@@ -21,6 +22,7 @@ export class KeyvProjectConfigurationRepository extends KeyvAggregateRootReposit
         return {
             id,
             type,
+            version,
             description,
             public: _public,
             files,

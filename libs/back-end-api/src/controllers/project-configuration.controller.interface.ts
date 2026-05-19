@@ -1,7 +1,7 @@
-import { IProjectConfigurationDTO } from "../dto/project-configuration.dto.interface";
-import { Id } from "../types/id";
+import { IFindOneProjectConfigurationDTO } from "../dto/inputs/find.one.project-configuration.dto.interface";
+import { IProjectConfigurationDTO } from "../dto/outputs/project-configuration.dto.interface";
 
 
 export interface IProjectConfigurationController {
-    findOne(projectConfigurationId: Id): Promise<IProjectConfigurationDTO>;
+    findOne(dto: IFindOneProjectConfigurationDTO): Promise<IProjectConfigurationDTO>;
 }

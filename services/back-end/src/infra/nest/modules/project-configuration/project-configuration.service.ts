@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { MaybeUndefined } from "@ask-ell/core";
 
-import { Id, IProjectConfigurationDTO } from "@ask/back-end-api";
+import type { IProjectConfigurationDTO, IFindOneProjectConfigurationDTO } from "@ask/back-end-api";
 
 import type { IUnitOfWork } from "../../../../shared/unit-of-work";
 import { UNIT_OF_WORK_PROVIDER } from "../../config/providers"
@@ -14,8 +14,11 @@ export class ProjectConfigurationService {
         private unitOfWork: IUnitOfWork
     ){}
 
-    async findOne(projectConfigurationId: Id): Promise<IProjectConfigurationDTO> {
-        const projectConfiguration: MaybeUndefined<IProjectConfigurationDTO> = await this.unitOfWork.getProjectConfigurationProvider().findOneById(projectConfigurationId);
+    async findOne({
+        id
+    }: IFindOneProjectConfigurationDTO): Promise<IProjectConfigurationDTO> {
+        // TODO: search by id and version
+        const projectConfiguration: MaybeUndefined<IProjectConfigurationDTO> = await this.unitOfWork.getProjectConfigurationProvider().findOneById(id);
         if(!projectConfiguration){
             throw new NotFoundException();
         }

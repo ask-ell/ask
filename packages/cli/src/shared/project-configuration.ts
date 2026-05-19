@@ -1,4 +1,4 @@
-import { HttpClient, ILogger, IResult, fail, success } from "@ask-ell/core";
+import { HttpClient, ILogger, IResult, MaybeUndefined, fail, success } from "@ask-ell/core";
 
 import { IProjectConfigurationDTO, IProjectConfigurationPartialDTO, IProjectDTO } from "@ask/back-end-api";
 
@@ -43,7 +43,13 @@ export const getProjectConfigurations = ({
                     });
 
                 if(projectConfigurationFetchingResult.isAFail()) {
-                    const errorMessage: string = (projectConfigurationFetchingResult.getError() as any).data.message;
+                    let errorMessage: string = projectConfigurationFetchingResult.getError().message;
+
+                    const errorData: MaybeUndefined<any> = (projectConfigurationFetchingResult.getError() as any).data; // TODO: add type
+                    if(errorData?.message) {
+                        errorMessage = errorData.message;
+                    }
+
                     logger.error(`Error for project configuration "${id}" : ${errorMessage}`);
                 }
 

@@ -1,4 +1,4 @@
-import { Id } from "../types/id";
+import { Id } from "../../types/id";
 
 
 export interface ITaskDTO {
