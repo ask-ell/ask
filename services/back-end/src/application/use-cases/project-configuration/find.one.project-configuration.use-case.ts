@@ -11,10 +11,10 @@ export class FindOneProjectConfigurationUseCase implements IFindOneProjectConfig
     ) {}
 
     async run({
-        id
+        identifier,
     }: FindOneProjectConfigurationUseCaseInput): Promise<MaybeUndefined<ProjectConfigurationAggregateRootState>> {
         // TODO: search by id and version
-        const projectConfiguration = await this.unitOfWork.getProjectConfigurationProvider().findOneById(id);
+        const projectConfiguration = await this.unitOfWork.getProjectConfigurationProvider().findOneById(identifier);
         
         if(!projectConfiguration?.public){
             return undefined;

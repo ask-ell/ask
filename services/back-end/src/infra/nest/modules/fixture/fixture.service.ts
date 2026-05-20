@@ -6,8 +6,8 @@ import { NestLogger } from "@ask-ell/nest";
 
 import type { IProjectConfigurationDTO } from "@ask/back-end-api";
 
-import type { IUnitOfWork } from "../../../../application";
-import { UNIT_OF_WORK_PROVIDER } from "../../config/providers";
+import type { ISaveProjectConfigurationUseCase } from "../../../../application";
+import { SAVE_PROJECT_CONFIGURATION_USE_CASE } from "../../config/providers";
 import { Fixture } from "../../../../shared/fixtures";
 
 
@@ -16,13 +16,13 @@ export class FixtureService {
     private logger: ILogger = NestLogger.fromClass(FixtureService);
 
     constructor(
-        @Inject(UNIT_OF_WORK_PROVIDER)
-        private unitOfWork: IUnitOfWork
+        @Inject(SAVE_PROJECT_CONFIGURATION_USE_CASE)
+        private saveProjectConfigurationUseCase: ISaveProjectConfigurationUseCase
     ){
-        this.setDataFromLocalFile().catch(this.logger.error.bind(this.logger));
+        this.saveDataFromLocalFile().catch(this.logger.error.bind(this.logger));
     }
 
-    async setDataFromLocalFile(): Promise<void> {
+    async saveDataFromLocalFile(): Promise<void> {
         // TODO: not run in production mode
 
         const fixtures: Fixture[] = JSON.parse(
@@ -40,18 +40,17 @@ export class FixtureService {
             fixtures.map(async (fixture: Fixture): Promise<void> => {
                 await Promise.resolve();
                 if(fixture.type === "project-configuration") {
-                    return this.persistProjectConfiguration(fixture);
+                    return this.saveProjectConfiguration(fixture);
                 }
             })
-        )
+        );
     }
 
-    private async persistProjectConfiguration(fixture: IProjectConfigurationDTO): Promise<void> {
-        const isProjectConfigurationAlreadyExists: boolean = await this.unitOfWork.getProjectConfigurationRepository().updateOne(fixture);
-        if(isProjectConfigurationAlreadyExists) {
-            return this.logger.info(`Project configuration "${fixture.id}" already saved and updated`);
-        }
-        await this.unitOfWork.getProjectConfigurationRepository().save(fixture);
-        return this.logger.info(`Project configuration "${fixture.id}" saved`);
+    private async saveProjectConfiguration(fixture: IProjectConfigurationDTO): Promise<void> {
+        await this.saveProjectConfigurationUseCase.run({
+            ...fixture,
+            identifier: fixture.id
+        });
+        return this.logger.info(`Project configuration "${fixture.id}" saved / updated`);
     }
 }

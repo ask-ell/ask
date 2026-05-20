@@ -7,7 +7,6 @@
   },
   {
     "id": "private",
-    "version": "latest",
     "type": "project-configuration",
     "accounts": [
       {
@@ -18,7 +17,6 @@
   },
   {
     "id": "nx",
-    "version": "latest",
     "type": "project-configuration",
     "description": "Nx is a set of extensible dev tools for monorepos, which helps you develop like Google, Facebook, and Microsoft.",
     "public": true,

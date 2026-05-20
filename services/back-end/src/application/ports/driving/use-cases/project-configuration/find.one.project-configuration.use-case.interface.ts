@@ -5,7 +5,7 @@ import { ProjectConfigurationAggregateRootState } from "./types";
 
 
 export type FindOneProjectConfigurationUseCaseInput = {
-    id: string;
+    identifier: string;
     version?: string;
 }
 

@@ -1,16 +1,21 @@
 import { KeyvAggregateRootRepository } from "@ask-ell/keyv";
 
-import { IProjectConfigurationState, ProjectConfigurationAggregateRootState } from "../../application";
+import { IProjectConfigurationRepository, ProjectConfigurationAggregateRootState } from "../../application";
 
 
-export class KeyvProjectConfigurationRepository extends KeyvAggregateRootRepository<IProjectConfigurationState, ProjectConfigurationAggregateRootState> {
-    override async save(entityState: IProjectConfigurationState): Promise<ProjectConfigurationAggregateRootState> {
-        await this.instance.set(entityState.version, entityState);
+export class KeyvProjectConfigurationRepository extends KeyvAggregateRootRepository<ProjectConfigurationAggregateRootState, ProjectConfigurationAggregateRootState> implements IProjectConfigurationRepository {
+    override async save(entityState: ProjectConfigurationAggregateRootState): Promise<ProjectConfigurationAggregateRootState> {
+        // TODO: move in @ask-ell/core ?
+        if(!entityState.id){
+            return super.save(entityState);
+        }
+        await this.instance.set(entityState.id, entityState);
         return entityState;
     }
 
     protected override purgeData({
         id,
+        identifier,
         version,
         description,
         public: _public,
@@ -20,6 +25,7 @@ export class KeyvProjectConfigurationRepository extends KeyvAggregateRootReposit
     }: ProjectConfigurationAggregateRootState): ProjectConfigurationAggregateRootState {
         return {
             id,
+            identifier,
             version,
             description,
             public: _public,

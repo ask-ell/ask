@@ -1,6 +1,6 @@
 import { KeyvAggregateRootProvider } from "@ask-ell/keyv";
 
-import { IProjectConfigurationState, ProjectConfigurationAggregateRootState } from "../../application";
+import { IProjectConfigurationProvider, IProjectConfigurationState, ProjectConfigurationAggregateRootState } from "../../application";
 
 
-export class KeyvProjectConfigurationProvider extends KeyvAggregateRootProvider<IProjectConfigurationState, ProjectConfigurationAggregateRootState> {}
+export class KeyvProjectConfigurationProvider extends KeyvAggregateRootProvider<IProjectConfigurationState, ProjectConfigurationAggregateRootState> implements IProjectConfigurationProvider {}
