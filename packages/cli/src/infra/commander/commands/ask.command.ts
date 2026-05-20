@@ -1,3 +1,5 @@
+import { homedir } from "os";
+import { join } from "path";
 import { Command } from "commander";
 
 import { RootOptions } from "../types";
@@ -7,7 +9,7 @@ export class AskCommand extends Command {
     constructor() {
         super('ask');
         this
-            .option('-s, --storage [PATH]', 'Storage directory path', '$HOME/.ask') // TODO: make creating it in home directory
+            .option('-s, --storage [PATH]', 'Storage directory path', join(homedir(), '.ask'))
             .option('-r, --remote [URL]', 'Remote URL')
             .option('-l, --log [LEVEL]', 'Logger level')
             .allowExcessArguments();
