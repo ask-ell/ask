@@ -2,7 +2,7 @@ import Keyv, { KeyvStoreAdapter } from "keyv";
 
 import { KeyvStoreAdapterFactory } from "@ask-ell/back-end";
 
-import { IUnitOfWork, UnitOfWork } from "../../shared/unit-of-work";
+import { IUnitOfWork, UnitOfWork } from "../../application";
 import { KeyvProjectConfigurationProvider, KeyvProjectConfigurationRepository } from "../keyv";
 
 

@@ -6,7 +6,7 @@ import { NestLogger } from "@ask-ell/nest";
 
 import type { IProjectConfigurationDTO } from "@ask/back-end-api";
 
-import type { IUnitOfWork } from "../../../../shared/unit-of-work"
+import type { IUnitOfWork } from "../../../../application";
 import { UNIT_OF_WORK_PROVIDER } from "../../config/providers";
 import { Fixture } from "../../../../shared/fixtures";
 

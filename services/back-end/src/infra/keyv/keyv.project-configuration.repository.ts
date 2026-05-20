@@ -1,27 +1,25 @@
 import { KeyvAggregateRootRepository } from "@ask-ell/keyv";
 
-import { IProjectConfigurationDTO } from "@ask/back-end-api";
+import { IProjectConfigurationState, ProjectConfigurationAggregateRootState } from "../../application";
 
 
-export class KeyvProjectConfigurationRepository extends KeyvAggregateRootRepository<IProjectConfigurationDTO, IProjectConfigurationDTO> {
-    override async save(entityState: IProjectConfigurationDTO): Promise<IProjectConfigurationDTO> {
-        await this.instance.set(entityState.id, entityState);
+export class KeyvProjectConfigurationRepository extends KeyvAggregateRootRepository<IProjectConfigurationState, ProjectConfigurationAggregateRootState> {
+    override async save(entityState: IProjectConfigurationState): Promise<ProjectConfigurationAggregateRootState> {
+        await this.instance.set(entityState.version, entityState);
         return entityState;
     }
 
     protected override purgeData({
         id,
-        type,
         version,
         description,
         public: _public,
         files,
         tools,
         tasks
-    }: IProjectConfigurationDTO): IProjectConfigurationDTO {
+    }: ProjectConfigurationAggregateRootState): ProjectConfigurationAggregateRootState {
         return {
             id,
-            type,
             version,
             description,
             public: _public,

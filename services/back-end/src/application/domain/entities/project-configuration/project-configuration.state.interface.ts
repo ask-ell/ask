@@ -4,6 +4,7 @@ import { IToolState } from "../tool/tool.state.interface";
 
 
 export interface IProjectConfigurationState {
+    id: string;
     version: string;
     public: boolean;
     description: string;

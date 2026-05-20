@@ -1,5 +1,5 @@
 export interface ITaskState {
-    identifier: string;
+    id: string;
     description?: string;
     instructions: string[];
     reauiredFiles?: string[];
