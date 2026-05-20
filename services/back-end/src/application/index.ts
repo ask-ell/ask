@@ -1,6 +1,9 @@
 export * from "./domain/entities/project-configuration/project-configuration.state.interface"; // TODO: remove after state update
+export * from "./ports/types";
 export * from "./ports/driven/project-configuration/project-configuration.provider.interface";
 export * from "./ports/driven/project-configuration/project-configuration.repository.interface";
+export * from "./ports/driven/version-tag/version-tag.provider.interface";
+export * from "./ports/driven/version-tag/version-tag.repository.interface";
 export * from "./ports/driving/use-cases/project-configuration/find.one.project-configuration.use-case.interface";
 export * from "./ports/driving/use-cases/project-configuration/save.project-configuration.use-case.interface";
 export * from "./ports/driving/use-cases/project-configuration/types";

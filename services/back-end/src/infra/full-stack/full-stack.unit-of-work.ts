@@ -2,8 +2,8 @@ import Keyv, { KeyvStoreAdapter } from "keyv";
 
 import { KeyvStoreAdapterFactory } from "@ask-ell/back-end";
 
-import { IUnitOfWork, UnitOfWork } from "../../application";
-import { KeyvProjectConfigurationProvider, KeyvProjectConfigurationRepository } from "../keyv";
+import { IUnitOfWork, ProjectConfigurationAggregateRootState, UnitOfWork } from "../../application";
+import { KeyvProjectConfigurationProvider, KeyvProjectConfigurationRepository, KeyvVersionTagProvider, KeyvVersionTagRepository } from "../keyv";
 
 
 export class FullStackUnitOfWork extends UnitOfWork implements IUnitOfWork {
@@ -13,8 +13,12 @@ export class FullStackUnitOfWork extends UnitOfWork implements IUnitOfWork {
             databaseRelativePath: "tmp/ask.sqlite",
             postgresUri: ''
         });
-        const keyv: Keyv = new Keyv({ store });
-        this.projectConfigurationProvider = new KeyvProjectConfigurationProvider(keyv);
-        this.projectConfigurationRepository = new KeyvProjectConfigurationRepository(keyv);
+        const projectConfigurationKeyvInstance: Keyv<ProjectConfigurationAggregateRootState> = new Keyv({ store, namespace: 'project-configuration' });
+        this.projectConfigurationProvider = new KeyvProjectConfigurationProvider(projectConfigurationKeyvInstance);
+        this.projectConfigurationRepository = new KeyvProjectConfigurationRepository(projectConfigurationKeyvInstance);
+
+        const versionTagKeyvInstance: Keyv = new Keyv({ store, namespace: 'version-tag' });
+        this.versionTagProvider = new KeyvVersionTagProvider(versionTagKeyvInstance);
+        this.versionTagRepository = new KeyvVersionTagRepository(versionTagKeyvInstance);
     }
 }

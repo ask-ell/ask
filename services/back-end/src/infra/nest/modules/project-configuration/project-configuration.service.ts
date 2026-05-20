@@ -14,8 +14,14 @@ export class ProjectConfigurationService {
         private findOneProjectConfigurationUseCase: IFindOneProjectConfigurationUseCase
     ){}
 
-    async findOne(dto: IFindOneProjectConfigurationDTO): Promise<IProjectConfigurationDTO> {
-        const projectConfiguration: MaybeUndefined<ProjectConfigurationAggregateRootState> = await this.findOneProjectConfigurationUseCase.run(dto);
+    async findOne({
+        id,
+        version
+    }: IFindOneProjectConfigurationDTO): Promise<IProjectConfigurationDTO> {
+        const projectConfiguration: MaybeUndefined<ProjectConfigurationAggregateRootState> = await this.findOneProjectConfigurationUseCase.run({
+            version,
+            identifier: id
+        });
         if(!projectConfiguration){
             throw new NotFoundException();
         }
