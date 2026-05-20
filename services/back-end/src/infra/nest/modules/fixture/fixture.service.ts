@@ -51,6 +51,6 @@ export class FixtureService {
             ...fixture,
             identifier: fixture.id
         });
-        return this.logger.info(`Project configuration "${fixture.id}" saved / updated`);
+        return this.logger.info(`Project configuration "${fixture.id}" saved/ updated`);
     }
 }

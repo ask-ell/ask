@@ -1,8 +1,10 @@
 import { MaybeUndefined } from "@ask-ell/core";
+import { Id } from "@ask-ell/core/dist/src/ddd";
 
 import { FindOneProjectConfigurationUseCaseInput, IFindOneProjectConfigurationUseCase } from "../../ports/driving/use-cases/project-configuration/find.one.project-configuration.use-case.interface";
 import { ProjectConfigurationAggregateRootState } from "../../ports/driving/use-cases/project-configuration/types";
 import { IUnitOfWork } from "../../unit-of-work/unit-of-work.interface";
+import { VersionTagAggregateRootState } from "../../ports/types";
 
 
 export class FindOneProjectConfigurationUseCase implements IFindOneProjectConfigurationUseCase {
@@ -12,9 +14,23 @@ export class FindOneProjectConfigurationUseCase implements IFindOneProjectConfig
 
     async run({
         identifier,
+        version: definedVersion
     }: FindOneProjectConfigurationUseCaseInput): Promise<MaybeUndefined<ProjectConfigurationAggregateRootState>> {
-        // TODO: search by id and version
-        const projectConfiguration = await this.unitOfWork.getProjectConfigurationProvider().findOneById(identifier);
+        let version: string = definedVersion ?? 'latest';
+        if(version === 'latest') {
+            const versionTag: MaybeUndefined<VersionTagAggregateRootState> = await this.unitOfWork.getVersionTagProvider().findOneByTagAndIdentifier({
+                identifier,
+                tag: 'latest'
+            });
+
+            if(!versionTag) {
+                throw new Error('Version tag cannot be undefined here');
+            }
+            version = versionTag.version;
+        }
+
+        const focusedProjectConfigurationId: Id = `${identifier}:${version}`;
+        const projectConfiguration: MaybeUndefined<ProjectConfigurationAggregateRootState> = await this.unitOfWork.getProjectConfigurationProvider().findOneById(focusedProjectConfigurationId);
         
         if(!projectConfiguration?.public){
             return undefined;
