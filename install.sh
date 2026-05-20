@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: remove
+
 curl -o ask https://raw.githubusercontent.com/ask-ell/ask/refs/heads/release/bin
 
 BINARY_FILE_PATH=/usr/local/bin/ask

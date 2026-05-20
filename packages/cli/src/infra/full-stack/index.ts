@@ -15,16 +15,19 @@ export const run = async (): Promise<void> => {
     const logger: ILogger = new SignaleLogger();
     const runCommand: RunCommand = new RunCommand();
     const askCommand: AskCommand = new AskCommand();
-    const projectConfigurationProvider: ProjectConfigurationProvider<[IProjectDTO]> = getProjectConfigurations({
-        logger
-    });
     const taskRunner: TaskRunner = runTask({
         logger
     });
 
     askCommand.parse(process.argv);
+    const rootOptions = askCommand.getRootOptions();
 
-    const { storage } = askCommand.getRootOptions();
+    const projectConfigurationProvider: ProjectConfigurationProvider<[IProjectDTO]> = getProjectConfigurations({
+        logger,
+        rootOptions
+    });
+
+    const { storage } = rootOptions;
     await createDirectoryIfNotExists(logger)(storage);
 
     

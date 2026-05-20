@@ -13,6 +13,10 @@ import {
   IProjectDTO,
 } from '@ask/back-end-api';
 
+import { RootOptions } from './options';
+import { getDefaultRemote } from './remote';
+import { writeProjectConfigurationCache } from './cache';
+
 
 export type ProjectConfigurationProvider<Args extends any[]> = (
   ...args: Args
@@ -21,8 +25,13 @@ export type ProjectConfigurationProvider<Args extends any[]> = (
 export const getProjectConfigurations =
   ({
     logger,
+    rootOptions: {
+      storage,
+      remote
+    }
   }: {
     logger: ILogger;
+    rootOptions: RootOptions
   }): ProjectConfigurationProvider<[IProjectDTO]> =>
   async (project: IProjectDTO): Promise<IProjectConfigurationDTO[]> => {
     const { extends: projectConfigurationPartials } = project;
@@ -31,8 +40,7 @@ export const getProjectConfigurations =
       return Promise.resolve([]);
     }
 
-    // // TODO: extract
-    const defaultRemote: string = 'http://localhost:3000';
+    const defaultRemote: string = remote ?? getDefaultRemote();
 
     const projectConfigurationFetchingResults: IResult<IProjectConfigurationDTO>[] =
       await Promise.all(
@@ -43,9 +51,7 @@ export const getProjectConfigurations =
             version,
           }: IProjectConfigurationPartialDTO): Promise<
             IResult<IProjectConfigurationDTO>
-          > => {
-            // TODO: read files cache here
-
+          > => {            
             const remoteUrl: URL = new URL(remote ?? defaultRemote);
             const url: URL = new URL(
               'project-configurations/one',
@@ -57,16 +63,25 @@ export const getProjectConfigurations =
               url.searchParams.append('version', version);
             }
 
+            // TODO: read files cache here
+
             const projectConfigurationFetchingResult: IResult<IProjectConfigurationDTO> =
               await HttpClient.get<{ data: IProjectConfigurationDTO }>({
                 // TODO: add as type ?
                 url
               })
                 .then(
-                  (
+                  async (
                     response: IResult<{ data: IProjectConfigurationDTO }>,
-                  ): IResult<IProjectConfigurationDTO> => {
-                    return success(response.getData()!.data);
+                  ): Promise<IResult<IProjectConfigurationDTO>> => {
+                    const data: IProjectConfigurationDTO = response.getData()!.data;
+                    await writeProjectConfigurationCache({
+                      data,
+                      logger,
+                      remoteUrl,
+                      storage
+                    });
+                    return success(data);
                   },
                 )
                 .catch((error: any): IResult => {
@@ -95,7 +110,7 @@ export const getProjectConfigurations =
       );
 
     // TODO: fetch nested configurations
-    // TODO: store in cache here
+
     return projectConfigurationFetchingResults
       .filter(
         (
