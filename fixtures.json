@@ -72,20 +72,13 @@
       {
         "id": "lint",
         "description": "lint project",
-        "instructions": ["nx lint"]
+        "instructions": ["nx run-many -t lint"]
       },
       {
         "id": "test",
         "description": "run tests",
-        "instructions": ["nx test"],
+        "instructions": ["nx run-many -t test"],
         "files": [".ask/last_install"]
-      },
-      {
-        "id": "test:watch",
-        "description": "run tests in watch mode",
-        "instructions": [
-          "echo \"To test a service in watch mode, run : ask test:watch:one <service identifier> --watch\""
-        ]
       },
       {
         "id": "clean",

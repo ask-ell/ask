@@ -13,6 +13,7 @@ import {
   IProjectDTO,
 } from '@ask/back-end-api';
 
+
 export type ProjectConfigurationProvider<Args extends any[]> = (
   ...args: Args
 ) => Promise<IProjectConfigurationDTO[]>;
@@ -46,16 +47,20 @@ export const getProjectConfigurations =
             // TODO: read files cache here
 
             const remoteUrl: URL = new URL(remote ?? defaultRemote);
-            let path: string = `project-configurations/one?id=${id}`;
+            const url: URL = new URL(
+              'project-configurations/one',
+              remoteUrl
+            );
 
+            url.searchParams.append('id', id);
             if (version) {
-              path += `&version=${version}`;
+              url.searchParams.append('version', version);
             }
 
             const projectConfigurationFetchingResult: IResult<IProjectConfigurationDTO> =
               await HttpClient.get<{ data: IProjectConfigurationDTO }>({
                 // TODO: add as type ?
-                url: new URL(path, remoteUrl),
+                url
               })
                 .then(
                   (

@@ -32,6 +32,11 @@
         "watch": true
       }
     },
+    "test": {
+      "options": {
+        "passWithNoTests": true
+      }
+    },
     "chmod": {
       "executor": "nx:run-commands",
       "options": {
