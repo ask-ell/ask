@@ -1,6 +1,7 @@
 export * from "./domain/entities/project-configuration/project-configuration.state.interface"; // TODO: remove after state update
 export * from "./domain/entities/file/file.state.interface";
 export * from "./domain/entities/task/task.state.interface";
+export * from "./domain/entities/tool/tool.state.interface";
 export * from "./ports/types";
 export * from "./ports/driven/project-configuration/project-configuration.provider.interface";
 export * from "./ports/driven/project-configuration/project-configuration.repository.interface";

@@ -28,6 +28,10 @@
       {
         "name": "NPM",
         "url": "https://www.npmjs.com/"
+      },
+      {
+        "name": "Nx",
+        "url": "https://nx.dev/"
       }
     ],
     "files": [

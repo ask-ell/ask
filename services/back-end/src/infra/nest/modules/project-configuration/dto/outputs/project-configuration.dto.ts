@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import type { IProjectConfigurationDTO, IFileDTO, ITaskDTO } from '@ask/back-end-api';
+import type { IProjectConfigurationDTO, IFileDTO, ITaskDTO, IToolDTO } from '@ask/back-end-api';
 
 import { ProjectConfigurationAggregateRootState } from '../../../../../../application';
 import { FileDTO } from '../../../../dto/outputs/file.dto';
 import { TaskDTO } from '../../../../dto/outputs/task.dto';
+import { ToolDTO } from '../../../../dto/outputs/tool.dto';
 
 
 export class ProjectConfigurationDTO implements IProjectConfigurationDTO {
@@ -39,7 +40,11 @@ export class ProjectConfigurationDTO implements IProjectConfigurationDTO {
     })
     tasks?: ITaskDTO[];
 
-    // tools?: IToolDTO[];
+    @ApiProperty({
+        type: [ToolDTO],
+        required: false
+    })
+    tools?: IToolDTO[];
 
     static create({
         identifier,
@@ -47,7 +52,8 @@ export class ProjectConfigurationDTO implements IProjectConfigurationDTO {
         version,
         public: isPublic,
         files,
-        tasks
+        tasks,
+        tools
     }: ProjectConfigurationAggregateRootState): IProjectConfigurationDTO {
         const dto: IProjectConfigurationDTO = new ProjectConfigurationDTO();
         dto.id = identifier;
@@ -57,6 +63,7 @@ export class ProjectConfigurationDTO implements IProjectConfigurationDTO {
         dto.version = version;
         dto.files = files?.map(FileDTO.create);
         dto.tasks = tasks?.map(TaskDTO.create);
+        dto.tools = tools?.map(ToolDTO.create);
         return dto;
     }
 }
