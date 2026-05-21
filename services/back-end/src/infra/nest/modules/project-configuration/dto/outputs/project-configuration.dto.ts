@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import type { IProjectConfigurationDTO } from '@ask/back-end-api';
+import type { IProjectConfigurationDTO, IFileDTO } from '@ask/back-end-api';
+
 import { ProjectConfigurationAggregateRootState } from '../../../../../../application';
+import { FileDTO } from '../../../../dto/outputs/file.dto';
 
 
 export class ProjectConfigurationDTO implements IProjectConfigurationDTO {
@@ -24,7 +26,12 @@ export class ProjectConfigurationDTO implements IProjectConfigurationDTO {
     })
     description?: string;
 
-    // files?: IFileDTO[];
+    @ApiProperty({
+        type: [FileDTO],
+        required: false
+    })
+    files?: IFileDTO[];
+
     // tasks?: ITaskDTO[];
     // tools?: IToolDTO[];
 
@@ -33,12 +40,15 @@ export class ProjectConfigurationDTO implements IProjectConfigurationDTO {
         description,
         version,
         public: isPublic,
+        files
     }: ProjectConfigurationAggregateRootState): IProjectConfigurationDTO {
-        const dto = new ProjectConfigurationDTO();
+        const dto: IProjectConfigurationDTO = new ProjectConfigurationDTO();
         dto.id = identifier;
+        dto.type = "project-configuration";
         dto.public = isPublic;
         dto.description = description;
         dto.version = version;
+        dto.files = files?.map(FileDTO.create);
         return dto;
     }
 }
