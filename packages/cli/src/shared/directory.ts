@@ -5,6 +5,7 @@ import { mkdir } from "node:fs/promises";
 
 type DirectoryCreator = (path: string) => Promise<void>;
 
+// TODO: move in @ask-ell/node ?
 export const createDirectoryIfNotExists = (logger: ILogger): DirectoryCreator => async (path: string): Promise<void> => {
     if (existsSync(path)) {
         return Promise.resolve();
