@@ -16,6 +16,9 @@
         {
             "id": "build:cli",
             "description": "build the CLI",
+            "files": [
+                ".ask/last_install"
+            ],
             "instructions": [
                 "nx build cli"
             ]
