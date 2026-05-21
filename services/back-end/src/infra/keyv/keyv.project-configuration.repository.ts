@@ -18,7 +18,7 @@ export class KeyvProjectConfigurationRepository extends KeyvAggregateRootReposit
         identifier,
         version,
         description,
-        public: _public,
+        public: isPublic,
         files,
         tools,
         tasks
@@ -28,7 +28,7 @@ export class KeyvProjectConfigurationRepository extends KeyvAggregateRootReposit
             identifier,
             version,
             description,
-            public: _public,
+            public: isPublic,
             files,
             tools,
             tasks

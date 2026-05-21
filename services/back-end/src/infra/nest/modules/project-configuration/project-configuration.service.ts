@@ -5,6 +5,7 @@ import type { IProjectConfigurationDTO, IFindOneProjectConfigurationDTO } from "
 
 import type { IFindOneProjectConfigurationUseCase, ProjectConfigurationAggregateRootState } from "../../../../application";
 import { FIND_ONE_PROJECT_CONFIGURATION_USE_CASE } from "../../config/providers"
+import { ProjectConfigurationDTO } from "./dto/outputs/project-configuration.dto";
 
 
 @Injectable()
@@ -27,10 +28,6 @@ export class ProjectConfigurationService {
             throw new NotFoundException();
         }
 
-        return {
-            ...projectConfiguration,
-            id: projectConfiguration.identifier,
-            type: 'project-configuration'
-        };
+        return ProjectConfigurationDTO.create(projectConfiguration);
     }
 }
