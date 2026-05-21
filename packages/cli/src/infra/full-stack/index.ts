@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { ILogger } from '@ask-ell/core';
 import { join } from 'node:path';
 
-import { IProjectDTO, ITaskDTO } from '@ask/back-end-api';
+import { IProjectDTO, ITaskDTO, IProjectConfigurationDTO } from '@ask/back-end-api';
 
 import { AskCommand, RunCommand, TaskCommand } from '../commander';
 import { createDirectoryIfNotExists } from '../../shared/directory';
@@ -15,9 +15,6 @@ export const run = async (): Promise<void> => {
     const logger: ILogger = new SignaleLogger();
     const runCommand: RunCommand = new RunCommand();
     const askCommand: AskCommand = new AskCommand();
-    const taskRunner: TaskRunner = runTask({
-        logger
-    });
 
     askCommand.parse(process.argv);
     const rootOptions = askCommand.getRootOptions();
@@ -35,11 +32,13 @@ export const run = async (): Promise<void> => {
     );
     // TODO: check data format
 
-    const tasks: ITaskDTO[] = await getProjectTasks({
-        projectConfigurationProvider
-    })(project);
+    const projectConfigurations: IProjectConfigurationDTO[] = await projectConfigurationProvider(project);
+
+    const tasks: ITaskDTO[] = await getProjectTasks(project, projectConfigurations);
 
     tasks.forEach((task: ITaskDTO): void => {
+        // const taskProjectConfiguration: MaybeUndefined<IProjectConfigurationDTO> = 
+        const taskRunner: TaskRunner = runTask(logger);
         runCommand.addCommand(
             new TaskCommand(task)
                 .setTaskRunner(taskRunner)
