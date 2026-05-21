@@ -52,7 +52,12 @@
       {
         "id": "install",
         "description": "install dependencies",
-        "instructions": ["npm install", "date > .ask/last_install"]
+        "instructions": [
+          "sudo apt install -y nodejs npm",
+          "npm install --global nx",
+          "npm install",
+          "date > .ask/last_install"
+        ]
       },
       {
         "id": "build",
