@@ -1,5 +1,4 @@
 import {
-  HttpClient,
   ILogger,
   IResult,
   MaybeUndefined,
@@ -10,12 +9,13 @@ import {
 import {
   IProjectConfigurationDTO,
   IProjectConfigurationPartialDTO,
-  IProjectDTO,
+  IProjectDTO
 } from '@ask/back-end-api';
 
 import { RootOptions } from './options';
 import { getDefaultRemote } from './remote';
 import { writeProjectConfigurationCache } from './cache';
+import { ProjectConfigurationController } from './api';
 
 
 export type ProjectConfigurationProvider<Args extends any[]> = (
@@ -51,30 +51,19 @@ export const getProjectConfigurations =
             version,
           }: IProjectConfigurationPartialDTO): Promise<
             IResult<IProjectConfigurationDTO>
-          > => {            
+          > => {
             const remoteUrl: URL = new URL(remote ?? defaultRemote);
-            const url: URL = new URL(
-              'project-configurations/one',
-              remoteUrl
-            );
-
-            url.searchParams.append('id', id);
-            if (version) {
-              url.searchParams.append('version', version);
-            }
 
             // TODO: read files cache here
 
             const projectConfigurationFetchingResult: IResult<IProjectConfigurationDTO> =
-              await HttpClient.get<{ data: IProjectConfigurationDTO }>({
-                // TODO: add as type ?
-                url
-              })
+              await new ProjectConfigurationController(remoteUrl)
+                .findOne({
+                  id,
+                  version
+                })
                 .then(
-                  async (
-                    response: IResult<{ data: IProjectConfigurationDTO }>,
-                  ): Promise<IResult<IProjectConfigurationDTO>> => {
-                    const data: IProjectConfigurationDTO = response.getData()!.data;
+                  async (data: IProjectConfigurationDTO): Promise<IResult<IProjectConfigurationDTO>> => {
                     await writeProjectConfigurationCache({
                       data,
                       logger,
@@ -82,7 +71,7 @@ export const getProjectConfigurations =
                       storage
                     });
                     return success(data);
-                  },
+                  }
                 )
                 .catch((error: any): IResult => {
                   return fail(error);

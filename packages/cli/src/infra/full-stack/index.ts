@@ -30,7 +30,6 @@ export const run = async (): Promise<void> => {
     const { storage } = rootOptions;
     await createDirectoryIfNotExists(logger)(storage);
 
-    
     const project: IProjectDTO = JSON.parse(
         await readFile(join(process.cwd(), 'ask.json'), 'utf-8')
     );
