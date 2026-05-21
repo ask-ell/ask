@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
+    "rootDir": ".",
     "importHelpers": true,
     "isolatedModules": true,
     "lib": ["es2022"],

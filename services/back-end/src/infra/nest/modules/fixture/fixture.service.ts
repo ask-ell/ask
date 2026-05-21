@@ -4,11 +4,9 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ILogger } from "@ask-ell/core";
 import { NestLogger } from "@ask-ell/nest";
 
-import type { IProjectConfigurationDTO } from "@ask/back-end-api";
-
 import type { ISaveProjectConfigurationUseCase } from "../../../../application";
 import { SAVE_PROJECT_CONFIGURATION_USE_CASE } from "../../config/providers";
-import { Fixture } from "../../../../shared/fixtures";
+import { Fixture, ProjectConfigurationFixture } from "../../../../shared/fixtures";
 
 
 @Injectable()
@@ -46,7 +44,7 @@ export class FixtureService {
         );
     }
 
-    private async saveProjectConfiguration(fixture: IProjectConfigurationDTO): Promise<void> {
+    private async saveProjectConfiguration(fixture: ProjectConfigurationFixture): Promise<void> {
         await this.saveProjectConfigurationUseCase.run({
             ...fixture,
             identifier: fixture.id

@@ -1,4 +1,5 @@
 import { MaybeUndefined } from "@ask-ell/core";
+import { Id } from "@ask-ell/core/dist/src/ddd";
 
 import { ISaveProjectConfigurationUseCase, SaveProjectConfigurationUseCaseInput } from "../../ports/driving/use-cases/project-configuration/save.project-configuration.use-case.interface";
 import { ProjectConfigurationAggregateRootState } from "../../ports/driving/use-cases/project-configuration/types";
@@ -14,12 +15,15 @@ export class SaveProjectConfigurationUseCase implements ISaveProjectConfiguratio
     ){}
 
     async run(input: SaveProjectConfigurationUseCaseInput): Promise<ProjectConfigurationAggregateRootState> {
-        const version: string = new Date().getTime().toString()
+        const version: string = new Date().getTime().toString();
+        const id: Id = `${input.identifier}:${version}`;
         const projectConfiguration: IProjectConfiguration = new ProjectConfiguration({
             ...input,
-            id: `${input.identifier}:${version}`,
+            id,
             version
         });
+
+        // TODO: reject if existing project configuration is strictly equal
 
         const snapshot: ProjectConfigurationAggregateRootState = projectConfiguration.getSnapshot();
         await this.unitOfWork.getProjectConfigurationRepository().save(snapshot);

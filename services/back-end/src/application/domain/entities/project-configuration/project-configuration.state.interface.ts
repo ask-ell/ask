@@ -6,8 +6,8 @@ import { IToolState } from "../tool/tool.state.interface";
 export interface IProjectConfigurationState {
     identifier: string;
     version: string;
-    public: boolean;
-    description: string;
+    public?: boolean;
+    description?: string;
     files?: IFileState[];
     tasks?: ITaskState[];
     tools?: IToolState[];

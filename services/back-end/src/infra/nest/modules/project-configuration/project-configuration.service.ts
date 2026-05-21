@@ -22,13 +22,14 @@ export class ProjectConfigurationService {
             version,
             identifier: id
         });
+
         if(!projectConfiguration){
             throw new NotFoundException();
         }
 
         return {
             ...projectConfiguration,
-            id: projectConfiguration.id!, // TODO: update @ask-ell/core
+            id: projectConfiguration.identifier,
             type: 'project-configuration'
         };
     }

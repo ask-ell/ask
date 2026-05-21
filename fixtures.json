@@ -11,7 +11,7 @@
     "accounts": [
       {
         "id": "test",
-        "permissions": ["get", "post", "put", "delete"]
+        "permissions": ["get", "put", "delete"]
       }
     ]
   },

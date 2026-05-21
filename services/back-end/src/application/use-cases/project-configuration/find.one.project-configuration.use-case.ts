@@ -29,8 +29,8 @@ export class FindOneProjectConfigurationUseCase implements IFindOneProjectConfig
             version = versionTag.version;
         }
 
-        const focusedProjectConfigurationId: Id = `${identifier}:${version}`;
-        const projectConfiguration: MaybeUndefined<ProjectConfigurationAggregateRootState> = await this.unitOfWork.getProjectConfigurationProvider().findOneById(focusedProjectConfigurationId);
+        const projectConfigurationId: Id = `${identifier}:${version}`;
+        const projectConfiguration: MaybeUndefined<ProjectConfigurationAggregateRootState> = await this.unitOfWork.getProjectConfigurationProvider().findOneById(projectConfigurationId);
         
         if(!projectConfiguration?.public){
             return undefined;

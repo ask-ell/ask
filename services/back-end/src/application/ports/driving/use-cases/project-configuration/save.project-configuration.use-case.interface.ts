@@ -8,8 +8,8 @@ import { IToolState } from "../../../../domain/entities/tool/tool.state.interfac
 
 export type SaveProjectConfigurationUseCaseInput = {
     identifier: string;
-    public: boolean;
-    description: string;
+    public?: boolean;
+    description?: string;
     files?: IFileState[];
     tasks?: ITaskState[];
     tools?: IToolState[];
