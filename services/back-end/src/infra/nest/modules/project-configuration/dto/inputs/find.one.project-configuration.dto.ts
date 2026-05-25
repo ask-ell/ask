@@ -4,7 +4,6 @@ import type { IFindOneProjectConfigurationDTO } from '@ask/back-end-api';
 
 
 export class FindOneProjectConfigurationDTO implements IFindOneProjectConfigurationDTO {
-    @ApiProperty()
     id!: string;
 
     @ApiProperty({

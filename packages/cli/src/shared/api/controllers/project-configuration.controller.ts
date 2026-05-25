@@ -13,11 +13,10 @@ export class ProjectConfigurationController implements IProjectConfigurationCont
         version
     }: IFindOneProjectConfigurationDTO): Promise<IProjectConfigurationDTO> {
         const url: URL = new URL(
-            'project-configurations/one',
+            `project-configurations/${id}`,
             this.remoteUrl
         );
 
-        url.searchParams.append('id', id);
         if (version) {
             url.searchParams.append('version', version);
         }

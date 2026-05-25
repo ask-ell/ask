@@ -1,7 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 
-import type { IProjectConfigurationController, IProjectConfigurationDTO } from '@ask/back-end-api';
+import type { IProjectConfigurationDTO } from '@ask/back-end-api';
 
 import { ProjectConfigurationService } from './project-configuration.service';
 import { FindOneProjectConfigurationDTO } from './dto/inputs/find.one.project-configuration.dto';
@@ -9,7 +9,7 @@ import { ProjectConfigurationDTO } from './dto/outputs/project-configuration.dto
 
 
 @Controller('project-configurations')
-export class ProjectConfigurationController implements IProjectConfigurationController {
+export class ProjectConfigurationController {
     constructor(
         private projectConfigurationService: ProjectConfigurationService
     ) {}
@@ -17,11 +17,14 @@ export class ProjectConfigurationController implements IProjectConfigurationCont
     @ApiResponse({
         type: ProjectConfigurationDTO
     })
-    @Get('one')
+    @Get(':projectConfigurationId')
     findOne(
+        @Param('projectConfigurationId')
+        projectConfigurationId: string,
         @Query()
-        dto: FindOneProjectConfigurationDTO
+        dto: FindOneProjectConfigurationDTO,
     ): Promise<IProjectConfigurationDTO> {
+        dto.id = projectConfigurationId;
         return this.projectConfigurationService.findOne(dto);
     }
 }
