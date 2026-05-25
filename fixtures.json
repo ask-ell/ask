@@ -40,11 +40,11 @@
         "instructions": ["cp -r .ask/secrets.sample.json .ask/secrets.json"]
       },
       {
-        "path": ".ask/last_install",
+        "path": "tmp/last_install",
         "instructions": ["@ask install"]
       },
       {
-        "path": ".ask/last_build",
+        "path": "tmp/last_build",
         "instructions": ["@ask build"]
       }
     ],
@@ -56,20 +56,20 @@
           "sudo apt install -y nodejs npm",
           "npm install --global nx",
           "npm install",
-          "date > .ask/last_install"
+          "date > tmp/last_install"
         ]
       },
       {
         "id": "build",
         "description": "build project",
-        "instructions": ["nx run-many -t build", "date > .ask/last_build"],
-        "files": [".ask/last_install"]
+        "instructions": ["nx run-many -t build", "date > tmp/last_build"],
+        "files": ["tmp/last_install"]
       },
       {
         "id": "serve",
         "description": "run services in development mode",
         "instructions": ["nx run-many -t serve"],
-        "files": [".ask/secrets.json", ".ask/last_install"]
+        "files": [".ask/secrets.json", "tmp/last_install"]
       },
       {
         "id": "format",
@@ -85,7 +85,7 @@
         "id": "test",
         "description": "run tests",
         "instructions": ["nx run-many -t test"],
-        "files": [".ask/last_install"]
+        "files": ["tmp/last_install"]
       },
       {
         "id": "clean",
