@@ -3,12 +3,18 @@ import { execSync } from "node:child_process";
 import { join } from "node:path";
 import { existsSync } from "node:fs";
 
-import { Id, IProjectConfigurationDTO, IProjectDTO, ITaskDTO } from "@ask/back-end-api";
+import { Id, IProjectConfigurationDTO, IProjectDTO, ITaskDTO, IFileDTO } from "@ask/back-end-api";
 
 
 const addStyleToDescription = (origin: string) => ({ description }: ITaskDTO): string => description ? `${description} <- ${origin}` : `<- ${origin}`;
 
-export const getProjectTasks = async (project: IProjectDTO, projectConfigurations: IProjectConfigurationDTO[]): Promise<ITaskDTO[]> => {
+type Aggregate = IProjectConfigurationDTO;
+
+export type RunnableTask = ITaskDTO & {
+    aggregates?: Aggregate[];
+}
+
+export const getProjectTasks = async (project: IProjectDTO, projectConfigurations: IProjectConfigurationDTO[]): Promise<RunnableTask[]> => {
     const tasks: Map<Id, ITaskDTO> = new Map();
 
     project.tasks?.forEach((task: ITaskDTO): void => {
@@ -40,7 +46,29 @@ export const getProjectTasks = async (project: IProjectDTO, projectConfiguration
         }
     });
 
-    return Array.from(tasks.values());
+    const runnableTasks: RunnableTask[] = [];
+
+    tasks.forEach((task: ITaskDTO): void => {
+        const runnableTask: RunnableTask = {
+            ...task
+        };
+        task.files?.forEach((file: string): void => {
+            projectConfigurations.forEach((aggregate: IProjectConfigurationDTO): void => {
+                aggregate.files?.forEach((aggregateFile: IFileDTO): void => {
+                    if(aggregateFile.path === file) {
+                        if(!runnableTask.aggregates) {
+                            runnableTask.aggregates = [];
+                        }
+                        runnableTask.aggregates.push(aggregate);
+                    }
+                });
+            });
+        });
+
+        runnableTasks.push(runnableTask)
+    });
+
+    return runnableTasks;
 };
 
 const runInstruction = (logger: ILogger) => (instruction: string): void => {
@@ -53,23 +81,29 @@ const runInstruction = (logger: ILogger) => (instruction: string): void => {
     logger.info(`Task completed !`);
 };
 
-export type TaskRunner = (task: ITaskDTO) => void;
+export type TaskRunner = (task: RunnableTask) => void;
 
-export const runTask = (logger: ILogger): TaskRunner => (task: ITaskDTO): void => {
+export const runTask = (logger: ILogger): TaskRunner => (task: RunnableTask): void => {
     task.files?.forEach((fileName: string): void => {
         const filePath: string = join(process.cwd(), fileName);
         if(existsSync(filePath)) {
             return;
         }
         // TODO: uncomment
-        // const fileDTO: MaybeUndefined<IFileDTO> = projectConfiguration.files.find(
-        //     (file: IFileDTO): boolean => file.path === fileName
-        // );
-        // if(!fileDTO) {
-        //     throw new Error(`File "${fileName}" is not defined in project configuration "${projectConfiguration.id}"`);
-        // }
+        let fileDTO: any = undefined;
+        task.aggregates?.forEach((aggregate: Aggregate): void => {
+            aggregate.files?.forEach((file: IFileDTO): void => {
+                if(file.path === fileName) {
+                    fileDTO = file;
+                }
+            });
+        });
 
-        // fileDTO.instructions.forEach(runInstruction(logger));
+        if(!fileDTO) {
+            throw new Error(`File "${fileName}" is not defined`);
+        }
+
+        fileDTO.instructions.forEach(runInstruction(logger));
     });
 
     task.instructions.forEach(runInstruction(logger));
