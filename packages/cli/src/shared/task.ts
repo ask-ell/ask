@@ -14,6 +14,7 @@ export type RunnableTask = ITaskDTO & {
     aggregates?: Aggregate[];
 }
 
+// TODO: move
 export const getProjectTasks = async (project: IProjectDTO, projectConfigurations: IProjectConfigurationDTO[]): Promise<RunnableTask[]> => {
     const tasks: Map<Id, ITaskDTO> = new Map();
 

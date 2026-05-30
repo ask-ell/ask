@@ -2,40 +2,40 @@ import { readFile } from 'node:fs/promises';
 import { ILogger } from '@ask-ell/core';
 import { join } from 'node:path';
 
-import { IProjectDTO, ITaskDTO, IProjectConfigurationDTO } from '@ask/back-end-api';
+import { IProjectDTO, ITaskDTO } from '@ask/back-end-api';
 
+import { GetProjectTasksUseCase, IGetProjectTasksUseCase, IUnitOfWork } from '../../application';
 import { AskCommand } from '../commander';
 import { SignaleLogger } from '../signale';
 import { createDirectoryIfNotExists } from '../../shared/directory';
-import { getProjectTasks } from '../../shared/task';
 import { RootOptions } from '../../shared/options';
-import { getProjectConfigurations, ProjectConfigurationProvider } from '../../shared/project-configuration';
+import { FullStackUnitOfWork } from './full-stack.unit-of-work';
 
 
 export const run = async (): Promise<void> => {
     const logger: ILogger = new SignaleLogger();
     const askCommand: AskCommand = new AskCommand(logger);
-
     const rootOptions: RootOptions = askCommand.getRootOptions();
 
-    const projectConfigurationProvider: ProjectConfigurationProvider<[IProjectDTO]> = getProjectConfigurations({
+    const unitOfWork: IUnitOfWork = new FullStackUnitOfWork(
         logger,
         rootOptions
-    });
+    );
+    const getProjectTasksUseCase: IGetProjectTasksUseCase = new GetProjectTasksUseCase(unitOfWork);
 
+    // TODO: remove ?
     // TODO: move in directory manager class
     const { storage } = rootOptions;
     await createDirectoryIfNotExists(logger)(storage);
 
     // TODO: move in directory manager class
+    // TODO: throw error if ask.json file does not exist
     const project: IProjectDTO = JSON.parse(
         await readFile(join(process.cwd(), 'ask.json'), 'utf-8')
     );
     // TODO: check data format
 
-    const projectConfigurations: IProjectConfigurationDTO[] = await projectConfigurationProvider(project);
-
-    const tasks: ITaskDTO[] = await getProjectTasks(project, projectConfigurations);
+    const tasks: ITaskDTO[] = await getProjectTasksUseCase.run(project);
 
     askCommand.setTasks(tasks);
 

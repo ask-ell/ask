@@ -18,6 +18,7 @@ import { writeProjectConfigurationCache } from './cache';
 import { ProjectConfigurationController } from './api';
 
 
+// TODO: remove
 export type ProjectConfigurationProvider<Args extends any[]> = (
   ...args: Args
 ) => Promise<IProjectConfigurationDTO[]>;
