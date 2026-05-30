@@ -3,6 +3,8 @@ import { join } from "path";
 
 type Path = string;
 
+export const PROJECT_SETTINGS_FILE_PATH: Path = join(process.cwd(), 'ask.json');
+
 export const CACHE_FOLDER_PATH = (storage: string): Path => join(
     storage,
     '.cache'
