@@ -24,7 +24,7 @@ export class FindOneProjectConfigurationUseCase implements IFindOneProjectConfig
             });
 
             if(!versionTag) {
-                throw new Error('Version tag cannot be undefined here');
+                return undefined;
             }
             version = versionTag.version;
         }
