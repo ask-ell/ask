@@ -5,7 +5,7 @@ import { IToolDTO } from "./toold.dto.interface";
 
 
 export interface IProjectConfigurationDTO extends IAggregate<'project-configuration'> {
-    version?: string;
+    version: string;
     public?: boolean;
     description?: string;
     files?: IFileDTO[];

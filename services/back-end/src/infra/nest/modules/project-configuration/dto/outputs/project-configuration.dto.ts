@@ -16,7 +16,7 @@ export class ProjectConfigurationDTO implements IProjectConfigurationDTO {
     type!: "project-configuration";
 
     @ApiProperty()
-    version?: string;
+    version!: string;
 
     @ApiProperty({
         required: false
