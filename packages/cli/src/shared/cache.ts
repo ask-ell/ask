@@ -1,10 +1,16 @@
 import { writeFile } from "node:fs/promises";
-import { join } from "node:path"
 import { ILogger } from "@ask-ell/core";
 
 import { IProjectConfigurationDTO } from "@ask/back-end-api";
 
 import { createDirectoryIfNotExists } from "./directory";
+import {
+    CACHE_FOLDER_PATH,
+    REMOTE_FOLDER_CACHE_PATH,
+    PROJECT_CONFIGURATION_HUB_CACHE_PATH,
+    PROJECT_CONFIGURATION_CACHE_PATH,
+    VERSION_FILE_PATH
+} from "./path";
 
 
 export const writeProjectConfigurationCache = async ({
@@ -20,18 +26,13 @@ export const writeProjectConfigurationCache = async ({
 }) => {
     await createDirectoryIfNotExists(logger)(storage);
 
-    const cacheFolder: string = join(storage, '.cache');
-    await createDirectoryIfNotExists(logger)(cacheFolder);
+    await createDirectoryIfNotExists(logger)(CACHE_FOLDER_PATH(storage));
 
-    const remoteFolderCachePath: string = join(cacheFolder, remoteUrl.toString().replace('://', '_'));
-    await createDirectoryIfNotExists(logger)(remoteFolderCachePath);
+    await createDirectoryIfNotExists(logger)(REMOTE_FOLDER_CACHE_PATH(remoteUrl)(storage));
 
-    const projectConfigurationHubCachePath: string = join(remoteFolderCachePath, "project-configurations");
-    await createDirectoryIfNotExists(logger)(projectConfigurationHubCachePath);
+    await createDirectoryIfNotExists(logger)(PROJECT_CONFIGURATION_HUB_CACHE_PATH(remoteUrl)(storage));
 
-    const projectConfigurationCachePath: string = join(projectConfigurationHubCachePath, data.id);
-    await createDirectoryIfNotExists(logger)(projectConfigurationCachePath);
+    await createDirectoryIfNotExists(logger)(PROJECT_CONFIGURATION_CACHE_PATH(data.id)(remoteUrl)(storage));
 
-    const versionFilePath: string = join(projectConfigurationCachePath, `${data.version}.json`);
-    await writeFile(versionFilePath, JSON.stringify(data, null, 2));
+    await writeFile(VERSION_FILE_PATH(data.version)(data.id)(remoteUrl)(storage), JSON.stringify(data, null, 2));
 }

@@ -4,29 +4,30 @@ import { join } from 'node:path';
 
 import { IProjectDTO, ITaskDTO, IProjectConfigurationDTO } from '@ask/back-end-api';
 
-import { AskCommand, RunCommand, TaskCommand } from '../commander';
-import { createDirectoryIfNotExists } from '../../shared/directory';
+import { AskCommand } from '../commander';
 import { SignaleLogger } from '../signale';
-import { getProjectTasks, runTask, TaskRunner } from '../../shared/task';
+import { createDirectoryIfNotExists } from '../../shared/directory';
+import { getProjectTasks } from '../../shared/task';
+import { RootOptions } from '../../shared/options';
 import { getProjectConfigurations, ProjectConfigurationProvider } from '../../shared/project-configuration';
 
 
 export const run = async (): Promise<void> => {
     const logger: ILogger = new SignaleLogger();
-    const runCommand: RunCommand = new RunCommand();
-    const askCommand: AskCommand = new AskCommand();
+    const askCommand: AskCommand = new AskCommand(logger);
 
-    askCommand.parse(process.argv);
-    const rootOptions = askCommand.getRootOptions();
+    const rootOptions: RootOptions = askCommand.getRootOptions();
 
     const projectConfigurationProvider: ProjectConfigurationProvider<[IProjectDTO]> = getProjectConfigurations({
         logger,
         rootOptions
     });
 
+    // TODO: move in directory manager class
     const { storage } = rootOptions;
     await createDirectoryIfNotExists(logger)(storage);
 
+    // TODO: move in directory manager class
     const project: IProjectDTO = JSON.parse(
         await readFile(join(process.cwd(), 'ask.json'), 'utf-8')
     );
@@ -36,15 +37,7 @@ export const run = async (): Promise<void> => {
 
     const tasks: ITaskDTO[] = await getProjectTasks(project, projectConfigurations);
 
-    tasks.forEach((task: ITaskDTO): void => {
-        // const taskProjectConfiguration: MaybeUndefined<IProjectConfigurationDTO> = 
-        const taskRunner: TaskRunner = runTask(logger);
-        runCommand.addCommand(
-            new TaskCommand(task)
-                .setTaskRunner(taskRunner)
-        );
-    });
+    askCommand.setTasks(tasks);
 
-    askCommand.addCommand(runCommand);
     askCommand.parse(process.argv);
 };
