@@ -1,5 +1,6 @@
 import { MaybeUndefined, ILogger } from '@ask-ell/core';
-import { Id } from '@ask-ell/core/dist/src/ddd';
+import { existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 
 import { IProjectConfigurationDTO } from '@ask/back-end-api';
 
@@ -8,6 +9,7 @@ import { RootOptions } from '../../shared/options';
 import { getDefaultRemote } from '../../shared/remote';
 import { ProjectConfigurationController } from '../../shared/api';
 import { writeProjectConfigurationCache } from '../../shared/cache';
+import { VERSION_FILE_PATH } from '../../shared/path';
 
 
 export class HttpProjectConfigurationProvider implements IProjectConfigurationProvider {
@@ -24,7 +26,7 @@ export class HttpProjectConfigurationProvider implements IProjectConfigurationPr
         throw new Error('Method not implemented.');
     }
 
-    findOneById(id: Id): Promise<MaybeUndefined<IProjectConfigurationState>> {
+    findOneById(): Promise<MaybeUndefined<IProjectConfigurationState>> {
         throw new Error('Method not implemented.');
     }
 
@@ -35,7 +37,15 @@ export class HttpProjectConfigurationProvider implements IProjectConfigurationPr
     }: IProjectConfigurationPartialState): Promise<MaybeUndefined<IProjectConfigurationState>> {
         const remoteUrl: URL = new URL(remote ?? this.defaultRemote);
 
-        // TODO: read files cache here
+        if(version){
+            const PROJECT_CACHE_FILE: string = VERSION_FILE_PATH(version)(id)(remoteUrl)(this.rootOptions.storage);
+            if(existsSync(PROJECT_CACHE_FILE)){
+                this.logger.info(`Project configuration "${id}" version "${version}" found in cache for remote "${remoteUrl.href}".`);
+                return JSON.parse(
+                    await readFile(PROJECT_CACHE_FILE, 'utf-8')
+                );
+            }
+        }
 
         return new ProjectConfigurationController(remoteUrl)
             .findOne({
@@ -44,13 +54,15 @@ export class HttpProjectConfigurationProvider implements IProjectConfigurationPr
             })
             .then(
                 async (data: IProjectConfigurationDTO): Promise<MaybeUndefined<IProjectConfigurationDTO>> => {
-                    // TODO: use a global service
-                    await writeProjectConfigurationCache({
-                        data,
-                        logger: this.logger,
-                        remoteUrl,
-                        storage: this.rootOptions.storage
-                    });
+                    const PROJECT_CACHE_FILE: string = VERSION_FILE_PATH(data.version)(data.id)(remoteUrl)(this.rootOptions.storage);
+                    if(!existsSync(PROJECT_CACHE_FILE)){
+                        await writeProjectConfigurationCache({
+                            data,
+                            logger: this.logger,
+                            remoteUrl,
+                            storage: this.rootOptions.storage
+                        });
+                    }
                     return data;
                 }
             )

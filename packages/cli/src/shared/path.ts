@@ -10,12 +10,12 @@ export const CACHE_FOLDER_PATH = (storage: string): Path => join(
     '.cache'
 );
 
-export const REMOTE_FOLDER_CACHE_PATH = (remoteUrl: URL) => (storage: string): Path => join(
+const REMOTE_FOLDER_CACHE_PATH = (remoteUrl: URL) => (storage: string): Path => join(
     CACHE_FOLDER_PATH(storage),
     remoteUrl.toString().replace('://', '_')
 );
 
-export const PROJECT_CONFIGURATION_HUB_CACHE_PATH = (remoteUrl: URL) => (storage: string): Path => join(
+const PROJECT_CONFIGURATION_HUB_CACHE_PATH = (remoteUrl: URL) => (storage: string): Path => join(
     REMOTE_FOLDER_CACHE_PATH(remoteUrl)(storage),
     'project-configurations'
 );
