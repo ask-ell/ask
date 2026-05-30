@@ -10,31 +10,37 @@ import { AskCommand } from '../commander';
 import { SignaleLogger } from '../signale';
 import { RootOptions } from '../../shared/options';
 import { PROJECT_SETTINGS_FILE_PATH } from '../../shared/path';
+import { UserConfiguration } from '../../shared/user.configuration';
 
 
 export const run = async (): Promise<void> => {
     const logger: ILogger = new SignaleLogger();
-    const askCommand: AskCommand = new AskCommand(logger);
-    const rootOptions: RootOptions = askCommand.getRootOptions();
 
-    const unitOfWork: IUnitOfWork = new FullStackUnitOfWork(
-        logger,
-        rootOptions
-    );
-    const getProjectTasksUseCase: IGetProjectTasksUseCase = new GetProjectTasksUseCase(unitOfWork);
+    try {
+        const askCommand: AskCommand = new AskCommand(logger);
+        const rootOptions: RootOptions = askCommand.getRootOptions();
+        const userConfiguration: UserConfiguration = new UserConfiguration(rootOptions);
+        const unitOfWork: IUnitOfWork = new FullStackUnitOfWork(
+            logger,
+            rootOptions,
+            userConfiguration
+        );
+        const getProjectTasksUseCase: IGetProjectTasksUseCase = new GetProjectTasksUseCase(unitOfWork);
 
-    if(!existsSync(PROJECT_SETTINGS_FILE_PATH)) {
-        logger.error(`Project settings file not found at path: ${PROJECT_SETTINGS_FILE_PATH}`);
-        return;
+        if(!existsSync(PROJECT_SETTINGS_FILE_PATH)) {
+            throw new Error(`Project settings file not found at path: ${PROJECT_SETTINGS_FILE_PATH}`);
+        }
+
+        const project: IProjectDTO = JSON.parse(
+            await readFile(PROJECT_SETTINGS_FILE_PATH, 'utf-8')
+        );
+
+        const tasks: ITaskDTO[] = await getProjectTasksUseCase.run(project);
+    
+        askCommand.setTasks(tasks);
+    
+        askCommand.parse(process.argv);
+    } catch (error: any) {
+        logger.error(error.message ?? error);
     }
-
-    const project: IProjectDTO = JSON.parse(
-        await readFile(PROJECT_SETTINGS_FILE_PATH, 'utf-8')
-    );
-
-    const tasks: ITaskDTO[] = await getProjectTasksUseCase.run(project);
-
-    askCommand.setTasks(tasks);
-
-    askCommand.parse(process.argv);
 };

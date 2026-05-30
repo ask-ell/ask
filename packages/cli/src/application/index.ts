@@ -5,6 +5,6 @@ export * from './domain/entities/task/task.state.interface';
 export * from './ports/driven/project-configuration/project-configuration.provider.interface';
 export * from './ports/driven/project-configuration/project-configuration.repository.interface';
 export * from './ports/driving/use-cases/project-configuration/get-project-tasks.use-case.interface';
-export * from './use-cases/get-project-tasks.use-cases';
+export * from './use-cases/get-project-tasks.use-case';
 export * from './unit-of-work/unit-of-work.interface';
 export * from './unit-of-work/unit-of-work';

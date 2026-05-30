@@ -6,20 +6,21 @@ import { IProjectConfigurationDTO } from '@ask/back-end-api';
 
 import { IProjectConfigurationPartialState, IProjectConfigurationProvider, IProjectConfigurationState } from '../../application';
 import { RootOptions } from '../../shared/options';
-import { getDefaultRemote } from '../../shared/remote';
+import { UserConfiguration } from '../../shared/user.configuration';
 import { ProjectConfigurationController } from '../../shared/api';
 import { writeProjectConfigurationCache } from '../../shared/cache';
 import { VERSION_FILE_PATH } from '../../shared/path';
 
 
 export class HttpProjectConfigurationProvider implements IProjectConfigurationProvider {
-    private defaultRemote!: string;
+    private defaultRemote: string;
 
     constructor(
         private logger: ILogger,
-        private rootOptions: RootOptions
+        private rootOptions: RootOptions,
+        userConfiguration: UserConfiguration
     ) {
-        this.defaultRemote = rootOptions.remote ?? getDefaultRemote();
+        this.defaultRemote = rootOptions.remote ?? userConfiguration.getInstance().defaultRemote;
     }
 
     findAll(): Promise<IProjectConfigurationState[]> {
@@ -63,6 +64,7 @@ export class HttpProjectConfigurationProvider implements IProjectConfigurationPr
                             storage: this.rootOptions.storage
                         });
                     }
+                    // TODO: persist latest tag
                     return data;
                 }
             )

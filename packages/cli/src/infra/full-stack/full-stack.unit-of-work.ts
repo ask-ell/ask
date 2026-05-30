@@ -3,17 +3,20 @@ import { IUnitOfWork, UnitOfWork } from '../../application';
 
 import { HttpProjectConfigurationProvider, HttpProjectConfigurationRepository } from '../http';
 import { RootOptions } from '../../shared/options';
+import { UserConfiguration } from '../../shared/user.configuration';
 
 
 export class FullStackUnitOfWork extends UnitOfWork implements IUnitOfWork {
     constructor(
         logger: ILogger,
-        rootOptions: RootOptions
+        rootOptions: RootOptions,
+        userConfiguration: UserConfiguration
     ) {
         super();
         this.projectConfigurationProvider = new HttpProjectConfigurationProvider(
             logger,
-            rootOptions
+            rootOptions,
+            userConfiguration
         );
         this.projectConfigurationRepository = new HttpProjectConfigurationRepository();
     }
