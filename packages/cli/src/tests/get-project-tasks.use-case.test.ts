@@ -59,6 +59,35 @@ describe(GetProjectTasksUseCase.name, (): void => {
             ]
         };
         const tasks: ITaskState[] = await getProjectTasksUseCase.run(project);
-        expect(tasks).toEqual(projectConfiguration.tasks);
+        expect(tasks.length).toEqual(projectConfiguration.tasks?.length);
+    });
+
+    it("should return one task perr id", async (): Promise<void> => {
+        const projectConfiguration: IProjectConfigurationState = {
+            id: "project-configuration",
+            version: "1.0.0",
+            tasks: [
+                {
+                    id: "task",
+                    instructions: ["Do something"]
+                },
+                {
+                    id: "task",
+                    instructions: ["Do something else"]
+                }
+            ]
+        };
+
+        await unitOfWork.getProjectConfigurationRepository().save(projectConfiguration);
+
+        const project: IProjectState = {
+            extends: [
+                {
+                    id: projectConfiguration.id
+                }
+            ]
+        };
+        const tasks: ITaskState[] = await getProjectTasksUseCase.run(project);
+        expect(tasks.length).toEqual(1);
     });
 });

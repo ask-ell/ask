@@ -23,7 +23,27 @@ export class SaveProjectConfigurationUseCase implements ISaveProjectConfiguratio
             version
         });
 
-        // TODO: reject if existing project configuration is strictly equal
+        const existingProjectConfigurationState: MaybeUndefined<ProjectConfigurationAggregateRootState> = await this.unitOfWork
+            .getProjectConfigurationProvider()
+            .findOneByIdentifier(input.identifier);
+
+        // TODO: filter updates
+        if(existingProjectConfigurationState){
+            console.log({
+                snapshot: projectConfiguration.getSnapshot(),
+                existingProjectConfigurationState,
+            })
+            // const existingProjectConfiguration: IProjectConfiguration = new ProjectConfiguration(existingProjectConfigurationState);
+
+            // console.log({
+            //     identifier: projectConfiguration.getSnapshot().identifier,
+            //     isEqual: projectConfiguration.isEqual(existingProjectConfiguration)
+            // })
+
+            // if(projectConfiguration.isEqual(existingProjectConfiguration)){
+            //     throw new Error(`Project configuration with identifier ${input.identifier} already exists and is identical to the provided configuration. No update necessary.`);
+            // }
+        }
 
         const snapshot: ProjectConfigurationAggregateRootState = projectConfiguration.getSnapshot();
         await this.unitOfWork.getProjectConfigurationRepository().save(snapshot);
