@@ -8,7 +8,7 @@ import { IProjectConfigurationPartialState, IProjectConfigurationProvider, IProj
 import { RootOptions } from '../../shared/options';
 import { UserConfiguration } from '../../shared/user.configuration';
 import { ProjectConfigurationController } from '../../shared/api';
-import { writeProjectConfigurationCache } from '../../shared/cache';
+import { VersionTagCache, writeProjectConfigurationCache, writeVersionTagCache } from '../../shared/cache';
 import { VERSION_FILE_PATH } from '../../shared/path';
 
 
@@ -34,9 +34,21 @@ export class HttpProjectConfigurationProvider implements IProjectConfigurationPr
     async findOneFromPartialState({
         id,
         remote,
-        version
+        version: definedVersion
     }: IProjectConfigurationPartialState): Promise<MaybeUndefined<IProjectConfigurationState>> {
         const remoteUrl: URL = new URL(remote ?? this.defaultRemote);
+
+        let version: MaybeUndefined<string> = definedVersion;
+
+        if(!version) {
+            const LATEST_VERSION_PROJECT_CACHE_FILE: string = VERSION_FILE_PATH('latest')(id)(remoteUrl)(this.rootOptions.storage);
+            if(existsSync(LATEST_VERSION_PROJECT_CACHE_FILE)){
+                const cachedData: VersionTagCache = JSON.parse(
+                    await readFile(LATEST_VERSION_PROJECT_CACHE_FILE, 'utf-8')
+                );
+                version = cachedData.version;
+            }
+        }
 
         if(version){
             const PROJECT_CACHE_FILE: string = VERSION_FILE_PATH(version)(id)(remoteUrl)(this.rootOptions.storage);
@@ -54,18 +66,28 @@ export class HttpProjectConfigurationProvider implements IProjectConfigurationPr
                 version
             })
             .then(
-                async (data: IProjectConfigurationDTO): Promise<MaybeUndefined<IProjectConfigurationDTO>> => {
-                    const PROJECT_CACHE_FILE: string = VERSION_FILE_PATH(data.version)(data.id)(remoteUrl)(this.rootOptions.storage);
+                async (projectConfiguration: IProjectConfigurationDTO): Promise<MaybeUndefined<IProjectConfigurationDTO>> => {
+                    const PROJECT_CACHE_FILE: string = VERSION_FILE_PATH(projectConfiguration.version)(projectConfiguration.id)(remoteUrl)(this.rootOptions.storage);
                     if(!existsSync(PROJECT_CACHE_FILE)){
                         await writeProjectConfigurationCache({
-                            data,
+                            projectConfiguration,
                             logger: this.logger,
                             remoteUrl,
                             storage: this.rootOptions.storage
                         });
                     }
-                    // TODO: persist latest tag
-                    return data;
+
+                    if(!version || version === 'latest') {
+                        await writeVersionTagCache({
+                            projectConfiguration,
+                            logger: this.logger,
+                            remoteUrl,
+                            storage: this.rootOptions.storage,
+                            version: 'latest'
+                        });
+                    }
+
+                    return projectConfiguration;
                 }
             )
             .catch((error: any): undefined => {

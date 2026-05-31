@@ -1,4 +1,3 @@
-import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 import { Inject, Injectable } from "@nestjs/common";
 import { ILogger } from "@ask-ell/core";
@@ -7,6 +6,8 @@ import { NestLogger } from "@ask-ell/nest";
 import type { ISaveProjectConfigurationUseCase } from "../../../../application";
 import { SAVE_PROJECT_CONFIGURATION_USE_CASE } from "../../config/providers";
 import { Fixture, ProjectConfigurationFixture } from "../../../../shared/fixtures";
+import { FIXTURES_FILE_PATH } from "../../../../shared/paths";
+import { isDevMode } from "../../../../shared/environment";
 
 
 @Injectable()
@@ -17,15 +18,15 @@ export class FixtureService {
         @Inject(SAVE_PROJECT_CONFIGURATION_USE_CASE)
         private saveProjectConfigurationUseCase: ISaveProjectConfigurationUseCase
     ){
-        this.saveDataFromLocalFile().catch(this.logger.error.bind(this.logger));
+        if(isDevMode) {
+            this.saveDataFromLocalFile().catch(this.logger.error.bind(this.logger));
+        }
     }
 
     async saveDataFromLocalFile(): Promise<void> {
-        // TODO: not run in production mode
-
         const fixtures: Fixture[] = JSON.parse(
             await readFile(
-                join(process.cwd(), 'fixtures.json'),
+                FIXTURES_FILE_PATH,
                 'utf-8'
             )
         );
