@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO: remove
+# https://ask-ell.atlassian.net/browse/ASK-10
 
 make -f "$PWD/.ask/Makefile" $1

@@ -28,7 +28,6 @@ requirements-get:
 	cp -r .ask/secrets.sample.json .ask/secrets.json
 
 
-# TODO: https://ask-ell.atlassian.net/browse/FACTORY-97
 packageManager := npm
 packageManagerRun := $(packageManager) run
 

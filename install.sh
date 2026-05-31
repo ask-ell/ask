@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# TODO: remove
+# TODO: https://ask-ell.atlassian.net/browse/ASK-10
 
 curl -o ask https://raw.githubusercontent.com/ask-ell/ask/refs/heads/release/bin
 
