@@ -7,13 +7,14 @@
   },
   {
     "id": "private",
-    "type": "project-configuration",
-    "accounts": [
-      {
-        "id": "test",
-        "permissions": ["get", "put", "delete"]
-      }
-    ]
+    "type": "project-configuration"
+  },
+  {
+    "id": "private-test",
+    "type": "account-configuration",
+    "projectConfiguration": "private",
+    "account": "test",
+    "permissions": ["get", "put", "delete"]
   },
   {
     "id": "nx",

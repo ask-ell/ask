@@ -1,5 +1,7 @@
 export * from './controllers/project-configuration.controller.interface';
 export * from './dto/inputs/find.one.project-configuration.dto.interface';
+export * from './dto/outputs/account.dto.interface';
+export * from './dto/outputs/account-configuration.dto.interface';
 export * from './dto/outputs/file.dto.interface';
 export * from './dto/outputs/task.dto.interface';
 export * from './dto/outputs/project.dto.interface';
