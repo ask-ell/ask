@@ -2,9 +2,9 @@ import { ILogger } from '@ask-ell/core';
 import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 
-import { IProjectDTO, ITaskDTO } from '@ask/back-end-api';
+import { IProjectDTO } from '@ask/back-end-api';
 
-import { GetProjectTasksUseCase, IGetProjectTasksUseCase, IUnitOfWork } from '../../application';
+import { GetProjectTasksUseCase, IGetProjectTasksUseCase, IUnitOfWork, RunnableTask } from '../../application';
 import { FullStackUnitOfWork } from './full-stack.unit-of-work';
 import { AskCommand } from '../commander';
 import { SignaleLogger } from '../signale';
@@ -35,7 +35,7 @@ export const run = async (): Promise<void> => {
             await readFile(PROJECT_SETTINGS_FILE_PATH, 'utf-8')
         );
 
-        const tasks: ITaskDTO[] = await getProjectTasksUseCase.run(project);
+        const tasks: RunnableTask[] = await getProjectTasksUseCase.run(project);
     
         askCommand.setTasks(tasks);
     

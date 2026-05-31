@@ -1,12 +1,11 @@
 import { Command } from "commander";
 
-import { ITaskDTO } from "@ask/back-end-api";
-
+import { RunnableTask } from "../../../application";
 import { TaskRunner } from "../../../shared/task";
 
 
 export class TaskCommand extends Command {
-    constructor(private task: ITaskDTO){
+    constructor(private task: RunnableTask){
         super(task.id);
         if(task.description) {
             this.description(task.description);

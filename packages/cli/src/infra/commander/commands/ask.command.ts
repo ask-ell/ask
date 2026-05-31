@@ -1,15 +1,15 @@
+import { ILogger } from "@ask-ell/core";
 import { homedir } from "os";
 import { join } from "path";
 import { Command } from "commander";
-import { ILogger } from "@ask-ell/core";
 
-import { ITaskDTO } from '@ask/back-end-api';
+import { RunnableTask } from '../../../application';
+import { addStyleToDescription, runTask, TaskRunner } from "../../../shared/task";
 
 import { RootOptions } from "../types";
 import { CleanCommand } from "./clean.command";
 import { RunCommand } from "./run.command";
 import { TaskCommand } from "./task.command";
-import { runTask, TaskRunner } from "../../../shared/task";
 
 
 export class AskCommand extends Command {
@@ -31,10 +31,13 @@ export class AskCommand extends Command {
             );
     }
 
-    setTasks(tasks: ITaskDTO[]): this {
+    setTasks(tasks: RunnableTask[]): this {
         const runCommand: RunCommand = new RunCommand();
-        tasks.forEach((task: ITaskDTO): void => {
+
+        tasks.forEach((task: RunnableTask): void => {
+            task.description = addStyleToDescription(task);
             const taskRunner: TaskRunner = runTask(this.logger);
+
             runCommand.addCommand(
                 new TaskCommand(task)
                     .setTaskRunner(taskRunner)
