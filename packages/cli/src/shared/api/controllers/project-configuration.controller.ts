@@ -25,7 +25,12 @@ export class ProjectConfigurationController implements IProjectConfigurationCont
             // TODO: https://ask-ell.atlassian.net/browse/ASK-15
             url
         }).then(
-            (result: IResult<{ data: IProjectConfigurationDTO; }>): IProjectConfigurationDTO => result.getData()?.data!
+            (result: IResult<{ data: IProjectConfigurationDTO; }>): IProjectConfigurationDTO => {
+                if(result.isAFail()) {
+                    throw result.getError();
+                }
+                return result.getData()?.data!;
+            }
         );
     }
 }

@@ -8,12 +8,15 @@ import { CACHE_FOLDER_PATH } from "../../../shared/path";
 
 export class CleanCommand extends ChildCommand {
     constructor(
-        private logger: ILogger
+        logger: ILogger
     ) {
-        super('clean');
+        super({
+            name: 'clean',
+            logger
+        });
         this
             .description('clean the cache directory')
-            .action(this.clean.bind(this));
+            .wrappedAction(this.clean.bind(this));
     }
 
     private async clean({ options: { storage } }: ActionCallbackParams): Promise<void> {

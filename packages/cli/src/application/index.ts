@@ -4,8 +4,10 @@ export * from './domain/entities/project-configuration/project-configuration.sta
 export * from './domain/entities/task/task.state.interface';
 export * from './ports/driven/project-configuration/project-configuration.provider.interface';
 export * from './ports/driven/project-configuration/project-configuration.repository.interface';
+export * from './ports/driving/use-cases/project-configuration/get-project-configuration.use-case.interface';
 export * from './ports/driving/use-cases/project-configuration/get-project-tasks.use-case.interface';
 export * from './ports/driving/use-cases/project-configuration/types';
+export * from './use-cases/get-project-configuration.use-case';
 export * from './use-cases/get-project-tasks.use-case';
 export * from './unit-of-work/unit-of-work.interface';
 export * from './unit-of-work/unit-of-work';

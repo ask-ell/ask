@@ -1,4 +1,4 @@
-import { MaybeUndefined, ILogger } from '@ask-ell/core';
+import { MaybeUndefined, ILogger, HttpError } from '@ask-ell/core';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 
@@ -92,7 +92,7 @@ export class HttpProjectConfigurationProvider implements IProjectConfigurationPr
             )
             .catch((error: any): undefined => {
                 this.logger.error(
-                    `Error for project configuration "${id}" : ${error.message ?? error}`,
+                    `Error for project configuration "${id}" : ${error instanceof HttpError ? error.data.message : error}`,
                 );
                 return undefined;
             });

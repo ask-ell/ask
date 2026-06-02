@@ -3,24 +3,27 @@ import { homedir } from "os";
 import { join } from "path";
 import { Command } from "commander";
 
-import { IGetProjectTasksUseCase } from '../../../application';
-
 import { RootOptions } from "../../../shared/options";
 import { CleanCommand } from "./clean.command";
 import { RunCommand } from "./run.command";
 import { PullCommand } from "./pull.command";
 import { ListCommand } from "./list.command";
+import { GetProjectConfigurationUseCaseFactory, GetProjectTasksUseCaseFactory, UserConfigurationFactory } from "../../../shared/factories";
 
 
 type AskCommandProps = {
     logger: ILogger,
-    getProjectTasksUseCaseFactory: (rootOptions: RootOptions) => IGetProjectTasksUseCase,
+    getProjectTasksUseCaseFactory: GetProjectTasksUseCaseFactory,
+    getProjectConfigurationUseCaseFactory: GetProjectConfigurationUseCaseFactory,
+    userConfigurationFactory: UserConfigurationFactory
 };
 
 export class AskCommand extends Command {
     constructor({
         logger,
-        getProjectTasksUseCaseFactory
+        getProjectTasksUseCaseFactory,
+        getProjectConfigurationUseCaseFactory,
+        userConfigurationFactory
     }: AskCommandProps) {
         super('ask');
         this
@@ -31,10 +34,10 @@ export class AskCommand extends Command {
             new CleanCommand(logger)
         );
         this.addCommand(
-            new ListCommand(getProjectTasksUseCaseFactory)
+            new ListCommand(logger, getProjectTasksUseCaseFactory)
         );
         this.addCommand(
-            new PullCommand(logger)
+            new PullCommand(logger, getProjectConfigurationUseCaseFactory, userConfigurationFactory)
         );
         this.addCommand(
             new RunCommand(logger, getProjectTasksUseCaseFactory)

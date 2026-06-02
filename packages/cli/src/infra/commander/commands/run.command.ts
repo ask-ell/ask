@@ -7,27 +7,33 @@ import { IProjectDTO } from "@ask/back-end-api";
 import { IGetProjectTasksUseCase, RunnableTask } from "../../../application";
 import { ActionCallbackParams, ChildCommand } from "./child.command";
 import { PROJECT_SETTINGS_FILE_PATH } from "../../../shared/path";
-import { RootOptions } from "../../../shared/options";
 import { runTask } from "../../../shared/task";
+import { GetProjectTasksUseCaseFactory } from "../../../shared/factories";
 
 
 export class RunCommand extends ChildCommand {
     private getProjectTasksUseCase: MaybeUndefined<IGetProjectTasksUseCase>;
 
     constructor(
-        private logger: ILogger,
-        private getProjectTasksUseCaseFactory: (rootOptions: RootOptions) => IGetProjectTasksUseCase,
+        logger: ILogger,
+        private getProjectTasksUseCaseFactory: GetProjectTasksUseCaseFactory,
     ) {
-        super('run');
+        super({
+            name: 'run',
+            logger
+        });
         this
             .description('run a project task')
             .argument('<task>', 'task identifier')
-            .action(this.run.bind(this));
+            .wrappedAction(this.run.bind(this));
     }
 
     private async run({ options, args }: ActionCallbackParams): Promise<void> {
         if(!this.getProjectTasksUseCase){
-            this.getProjectTasksUseCase = this.getProjectTasksUseCaseFactory(options);
+            this.getProjectTasksUseCase = this.getProjectTasksUseCaseFactory({
+                options,
+                logger: this.logger
+            });
         }
 
         if(!existsSync(PROJECT_SETTINGS_FILE_PATH)) {
