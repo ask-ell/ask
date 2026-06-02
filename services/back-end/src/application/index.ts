@@ -1,4 +1,4 @@
-export * from "./domain/entities/project-configuration/project-configuration.state.interface"; // TODO: remove after state update
+export * from "./domain/entities/project-configuration/project-configuration.state.interface"; // TODO: https://ask-ell.atlassian.net/browse/ASK-17
 export * from "./domain/entities/file/file.state.interface";
 export * from "./domain/entities/task/task.state.interface";
 export * from "./domain/entities/tool/tool.state.interface";

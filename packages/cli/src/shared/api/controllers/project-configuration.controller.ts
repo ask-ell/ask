@@ -22,7 +22,7 @@ export class ProjectConfigurationController implements IProjectConfigurationCont
         }
 
         return HttpClient.get<{ data: IProjectConfigurationDTO }>({
-            // TODO: add as type from @ask-ell/core ?
+            // TODO: https://ask-ell.atlassian.net/browse/ASK-15
             url
         }).then(
             (result: IResult<{ data: IProjectConfigurationDTO; }>): IProjectConfigurationDTO => result.getData()?.data!

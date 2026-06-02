@@ -5,7 +5,7 @@ import { IProjectConfigurationRepository, ProjectConfigurationAggregateRootState
 
 export class KeyvProjectConfigurationRepository extends KeyvAggregateRootRepository<ProjectConfigurationAggregateRootState, ProjectConfigurationAggregateRootState> implements IProjectConfigurationRepository {
     override async save(entityState: ProjectConfigurationAggregateRootState): Promise<ProjectConfigurationAggregateRootState> {
-        // TODO: move in @ask-ell/core ?
+        // TODO: https://ask-ell.atlassian.net/browse/ASK-16
         if(!entityState.id){
             return super.save(entityState);
         }
