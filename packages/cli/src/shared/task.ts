@@ -4,11 +4,6 @@ import { execSync } from "node:child_process";
 import { RunnableTask } from '../application';
 
 
-export const addStyleToDescription = ({ description, origin }: RunnableTask): string =>{
-    const originId: string = origin?.id ?? '*';
-    return description ? `${description} <- ${originId}` : `<- ${originId}`
-};
-
 const runInstruction = (logger: ILogger) => (instruction: string): void => {
     if(instruction.includes('@ask')){
         instruction = instruction.replace('@ask', process.argv[1]);

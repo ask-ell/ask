@@ -8,8 +8,7 @@ import { IGetProjectTasksUseCase, RunnableTask } from "../../../application";
 import { ActionCallbackParams, ChildCommand } from "./child.command";
 import { PROJECT_SETTINGS_FILE_PATH } from "../../../shared/path";
 import { RootOptions } from "../../../shared/options";
-import { addStyleToDescription, runTask, TaskRunner } from "../../../shared/task";
-import { TaskCommand } from "./task.command";
+import { runTask } from "../../../shared/task";
 
 
 export class RunCommand extends ChildCommand {
@@ -26,7 +25,7 @@ export class RunCommand extends ChildCommand {
             .action(this.run.bind(this));
     }
 
-    private async run({ options }: ActionCallbackParams): Promise<void> {
+    private async run({ options, args }: ActionCallbackParams): Promise<void> {
         if(!this.getProjectTasksUseCase){
             this.getProjectTasksUseCase = this.getProjectTasksUseCaseFactory(options);
         }
@@ -41,16 +40,14 @@ export class RunCommand extends ChildCommand {
 
         const tasks: RunnableTask[] = await this.getProjectTasksUseCase.run(project);
 
-        tasks.forEach((task: RunnableTask): void => {
-            task.description = addStyleToDescription(task);
-            const taskRunner: TaskRunner = runTask(this.logger);
+        const taskId: string = args[0];
 
-            this.addCommand(
-                new TaskCommand(task)
-                    .setTaskRunner(taskRunner)
-            );
-        });
+        for (const task of tasks) {
+            if(task.id !== taskId) {
+                runTask(this.logger)(task);
+            }
+        }
 
-        // this.parse(process.argv);
+        throw new Error(`Unknown task : "${taskId}"`);
     }
 }

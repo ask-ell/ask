@@ -9,6 +9,7 @@ import { RootOptions } from "../../../shared/options";
 import { CleanCommand } from "./clean.command";
 import { RunCommand } from "./run.command";
 import { PullCommand } from "./pull.command";
+import { ListCommand } from "./list.command";
 
 
 type AskCommandProps = {
@@ -30,10 +31,13 @@ export class AskCommand extends Command {
             new CleanCommand(logger)
         );
         this.addCommand(
-            new RunCommand(logger, getProjectTasksUseCaseFactory)
+            new ListCommand(getProjectTasksUseCaseFactory)
         );
         this.addCommand(
             new PullCommand(logger)
+        );
+        this.addCommand(
+            new RunCommand(logger, getProjectTasksUseCaseFactory)
         );
     }
 
