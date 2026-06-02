@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import type { IProjectConfigurationDTO } from '@ask/back-end-api';
 
@@ -8,6 +8,7 @@ import { FindOneProjectConfigurationDTO } from './dto/inputs/find.one.project-co
 import { ProjectConfigurationDTO } from './dto/outputs/project-configuration.dto';
 
 
+@ApiTags('Project Configurations')
 @Controller('project-configurations')
 export class ProjectConfigurationController {
     constructor(

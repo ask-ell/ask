@@ -46,10 +46,14 @@ export class FixtureService {
     }
 
     private async saveProjectConfiguration(fixture: ProjectConfigurationFixture): Promise<void> {
-        await this.saveProjectConfigurationUseCase.run({
-            ...fixture,
-            identifier: fixture.id
-        });
-        return this.logger.info(`Project configuration "${fixture.id}" saved/ updated`);
+        return this.saveProjectConfigurationUseCase
+            .run({
+                ...fixture,
+                identifier: fixture.id
+            })
+            .then((): void => {
+                this.logger.info(`Project configuration "${fixture.id}" saved/ updated`);
+            })
+            .catch((error: any): void => this.logger.warn(error.message ?? error));
     }
 }

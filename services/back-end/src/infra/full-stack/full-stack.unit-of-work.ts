@@ -1,4 +1,4 @@
-import Keyv, { KeyvStoreAdapter } from "keyv";
+import Keyv from "keyv";
 
 import { KeyvStoreAdapterFactory } from "@ask-ell/back-end";
 
@@ -7,17 +7,27 @@ import { KeyvProjectConfigurationProvider, KeyvProjectConfigurationRepository, K
 
 
 export class FullStackUnitOfWork extends UnitOfWork implements IUnitOfWork {
-    constructor() {
+    constructor(
+        keyvStoreAdapterFactory: KeyvStoreAdapterFactory
+    ) {
         super();
-        const store: KeyvStoreAdapter = new KeyvStoreAdapterFactory().create({
-            databaseRelativePath: "tmp/ask.sqlite",
-            postgresUri: ''
+        const projectConfigurationKeyvInstance: Keyv<ProjectConfigurationAggregateRootState> = new Keyv({
+            namespace: 'project-configuration',
+            store: keyvStoreAdapterFactory.create({
+                databaseRelativePath: "tmp/ask.sqlite",
+                postgresUri: ''
+            }),
         });
-        const projectConfigurationKeyvInstance: Keyv<ProjectConfigurationAggregateRootState> = new Keyv({ store, namespace: 'project-configuration' });
         this.projectConfigurationProvider = new KeyvProjectConfigurationProvider(projectConfigurationKeyvInstance);
         this.projectConfigurationRepository = new KeyvProjectConfigurationRepository(projectConfigurationKeyvInstance);
 
-        const versionTagKeyvInstance: Keyv = new Keyv({ store, namespace: 'version-tag' });
+        const versionTagKeyvInstance: Keyv = new Keyv({
+            namespace: 'version-tag',
+            store: keyvStoreAdapterFactory.create({
+                databaseRelativePath: "tmp/ask.sqlite",
+                postgresUri: ''
+            })
+        });
         this.versionTagProvider = new KeyvVersionTagProvider(versionTagKeyvInstance);
         this.versionTagRepository = new KeyvVersionTagRepository(versionTagKeyvInstance);
     }

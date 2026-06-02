@@ -1,5 +1,5 @@
 import { IResult, ok } from "@ask-ell/core";
-import { AggregateRoot } from "@ask-ell/core/dist/src/ddd";
+import { AggregateRoot, AggregateRootState } from "@ask-ell/core/dist/src/ddd";
 
 import { IProjectConfigurationState } from "./project-configuration.state.interface";
 import { IProjectConfiguration } from "./project-configuration.interface";
@@ -11,18 +11,13 @@ export class ProjectConfiguration extends AggregateRoot<IProjectConfigurationSta
     }
 
     isEqual(otherProjectConfiguration: IProjectConfiguration): boolean {
-        const snapshot: any = this.getSnapshot();
+        const snapshot: Partial<AggregateRootState<IProjectConfigurationState>> = this.getSnapshot();
         delete snapshot.id;
         delete snapshot.version;
 
-        const otherProjectConfigurationSnapshot: any = otherProjectConfiguration.getSnapshot();
+        const otherProjectConfigurationSnapshot: Partial<AggregateRootState<IProjectConfigurationState>> = otherProjectConfiguration.getSnapshot();
         delete otherProjectConfigurationSnapshot.id;
         delete otherProjectConfigurationSnapshot.version;
-
-        // console.log({
-        //     snapshot: JSON.stringify(snapshot),
-        //     otherProjectConfigurationSnapshot: JSON.stringify(otherProjectConfigurationSnapshot)
-        // });
 
         return JSON.stringify(snapshot) === JSON.stringify(otherProjectConfigurationSnapshot);
     }

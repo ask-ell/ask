@@ -9,11 +9,11 @@ import {
 import { TestUnitOfWork } from "./test.unit-of-work";
 
 
-describe(FindOneProjectConfigurationUseCase.name, () => {
+describe(FindOneProjectConfigurationUseCase.name, (): void => {
     let unitOfWork: IUnitOfWork;
     let findOneProjectConfigurationUseCase: IFindOneProjectConfigurationUseCase;
 
-    beforeEach(() => {
+    beforeEach((): void => {
         unitOfWork = new TestUnitOfWork();
         findOneProjectConfigurationUseCase = new FindOneProjectConfigurationUseCase(unitOfWork);
     });

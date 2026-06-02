@@ -7,6 +7,7 @@ import { IUnitOfWork } from '../../unit-of-work/unit-of-work.interface'
 import { ProjectConfiguration } from '../../domain/entities/project-configuration/project-configuration';
 import { IProjectConfiguration } from "../../domain/entities/project-configuration/project-configuration.interface";
 import { VersionTagAggregateRootState } from "../../ports/types";
+import { DuplicatedProjectConfigurationError } from "../../errors/duplicated-project-configuration.error";
 
 
 export class SaveProjectConfigurationUseCase implements ISaveProjectConfigurationUseCase {
@@ -27,22 +28,11 @@ export class SaveProjectConfigurationUseCase implements ISaveProjectConfiguratio
             .getProjectConfigurationProvider()
             .findOneByIdentifier(input.identifier);
 
-        // TODO: filter updates
         if(existingProjectConfigurationState){
-            console.log({
-                snapshot: projectConfiguration.getSnapshot(),
-                existingProjectConfigurationState,
-            })
-            // const existingProjectConfiguration: IProjectConfiguration = new ProjectConfiguration(existingProjectConfigurationState);
-
-            // console.log({
-            //     identifier: projectConfiguration.getSnapshot().identifier,
-            //     isEqual: projectConfiguration.isEqual(existingProjectConfiguration)
-            // })
-
-            // if(projectConfiguration.isEqual(existingProjectConfiguration)){
-            //     throw new Error(`Project configuration with identifier ${input.identifier} already exists and is identical to the provided configuration. No update necessary.`);
-            // }
+            const existingProjectConfiguration: IProjectConfiguration = new ProjectConfiguration(existingProjectConfigurationState);
+            if(projectConfiguration.isEqual(existingProjectConfiguration)){
+                throw new DuplicatedProjectConfigurationError(input.identifier);
+            }
         }
 
         const snapshot: ProjectConfigurationAggregateRootState = projectConfiguration.getSnapshot();
