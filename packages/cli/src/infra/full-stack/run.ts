@@ -8,10 +8,18 @@ import { RootOptions } from '../../shared/options';
 import { UserConfiguration } from '../../shared/user.configuration';
 
 
-export const run = async (): Promise<void> => {
+const tryAndCatch = (logger: ILogger) => (action: () => void): void => {
+    try {
+        action();
+    } catch (error: any) {
+        logger.error(error.message ?? error);
+    }
+};
+
+export async function run(): Promise<void> {
     const logger: ILogger = new SignaleLogger();
 
-    try {
+    tryAndCatch(logger)((): void => {
         const getProjectTasksUseCaseFactory = (rootOptions: RootOptions): IGetProjectTasksUseCase => {
             const userConfiguration: UserConfiguration = new UserConfiguration(rootOptions);
             const unitOfWork: IUnitOfWork = new FullStackUnitOfWork(
@@ -22,13 +30,11 @@ export const run = async (): Promise<void> => {
             return new GetProjectTasksUseCase(unitOfWork);
         };
 
-        const askCommand: AskCommand = new AskCommand(
+        const askCommand: AskCommand = new AskCommand({
             logger,
             getProjectTasksUseCaseFactory
-        );
-    
+        });
+
         askCommand.parse(process.argv);
-    } catch (error: any) {
-        logger.error(error.message ?? error);
-    }
+    });
 };

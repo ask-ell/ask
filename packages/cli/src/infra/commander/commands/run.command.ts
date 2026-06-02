@@ -13,7 +13,7 @@ import { TaskCommand } from "./task.command";
 
 
 export class RunCommand extends ChildCommand {
-    private getProjectTasksUseCase: MaybeUndefined<IGetProjectTasksUseCase>
+    private getProjectTasksUseCase: MaybeUndefined<IGetProjectTasksUseCase>;
 
     constructor(
         private logger: ILogger,
@@ -23,8 +23,6 @@ export class RunCommand extends ChildCommand {
         this
             .description('run a project task')
             .argument('<task>', 'task identifier')
-            .allowUnknownOption(true)
-            .allowExcessArguments()
             .action(this.run.bind(this));
     }
 

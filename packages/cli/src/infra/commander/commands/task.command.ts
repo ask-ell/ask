@@ -4,6 +4,7 @@ import { RunnableTask } from "../../../application";
 import { TaskRunner } from "../../../shared/task";
 
 
+// TODO: remove
 export class TaskCommand extends Command {
     constructor(private task: RunnableTask){
         super(task.id);
