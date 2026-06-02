@@ -13,7 +13,6 @@ export class KeyvProjectConfigurationRepository extends KeyvAggregateRootReposit
         return entityState;
     }
 
-    // TODO: fix (didn't called or broken)
     protected override purgeData({
         id,
         identifier,
