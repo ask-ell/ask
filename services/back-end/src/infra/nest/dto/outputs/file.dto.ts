@@ -14,11 +14,11 @@ export class FileDTO implements IFileDTO {
 
     static create({
         path,
-        instructions
+        instructions,
     }: IFileState): IFileDTO {
         const dto: IFileDTO = new FileDTO();
-        dto.path = path;
         dto.instructions = instructions;
+        dto.path = path;
         return dto;
     }
 }

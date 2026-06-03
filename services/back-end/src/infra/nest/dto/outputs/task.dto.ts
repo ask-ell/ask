@@ -26,13 +26,13 @@ export class TaskDTO implements ITaskDTO {
         id,
         instructions,
         description,
-        requiredFiles
+        files
     }: ITaskState): ITaskDTO {
         const dto: ITaskDTO = new TaskDTO();
         dto.id = id;
         dto.instructions = instructions;
         dto.description = description;
-        dto.files = requiredFiles;
+        dto.files = files;
         return dto;
     }
 }

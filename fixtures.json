@@ -42,11 +42,11 @@
       },
       {
         "path": "tmp/last_install",
-        "instructions": ["@ask install"]
+        "instructions": ["@ask run install"]
       },
       {
         "path": "tmp/last_build",
-        "instructions": ["@ask build"]
+        "instructions": ["@ask run build"]
       }
     ],
     "tasks": [
@@ -57,13 +57,18 @@
           "sudo apt install -y nodejs npm",
           "npm install --global nx",
           "npm install",
+          "mkdir tmp",
           "date > tmp/last_install"
         ]
       },
       {
         "id": "build",
         "description": "build project",
-        "instructions": ["nx run-many -t build", "date > tmp/last_build"],
+        "instructions": [
+          "nx run-many -t build",
+          "mkdir tmp",
+          "date > tmp/last_build"
+        ],
         "files": ["tmp/last_install"]
       },
       {
