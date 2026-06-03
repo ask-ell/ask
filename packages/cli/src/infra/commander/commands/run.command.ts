@@ -19,7 +19,7 @@ export class RunCommand extends ChildCommand {
         private getProjectTasksUseCaseFactory: GetProjectTasksUseCaseFactory,
     ) {
         super({
-            name: 'run',
+            id: 'run',
             logger
         });
         this
@@ -47,13 +47,12 @@ export class RunCommand extends ChildCommand {
         const tasks: RunnableTask[] = await this.getProjectTasksUseCase.run(project);
 
         const taskId: string = args[0];
+        const taskToRun: MaybeUndefined<RunnableTask> = tasks.find((task: RunnableTask): boolean => task.id === taskId);
 
-        for (const task of tasks) {
-            if(task.id !== taskId) {
-                runTask(this.logger)(task);
-            }
+        if(!taskToRun) {
+            throw new Error(`Unknown task : "${taskId}"`);
         }
 
-        throw new Error(`Unknown task : "${taskId}"`);
+        runTask(this.logger)(taskToRun);
     }
 }

@@ -19,7 +19,7 @@ export class PullCommand extends ChildCommand {
         private userConfigurationFactory: UserConfigurationFactory
     ) {
         super({
-            name: 'pull',
+            id: 'pull',
             logger
         });
         this

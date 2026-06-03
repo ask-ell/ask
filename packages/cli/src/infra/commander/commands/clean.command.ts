@@ -11,7 +11,7 @@ export class CleanCommand extends ChildCommand {
         logger: ILogger
     ) {
         super({
-            name: 'clean',
+            id: 'clean',
             logger
         });
         this

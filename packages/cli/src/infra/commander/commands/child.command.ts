@@ -12,7 +12,7 @@ export type ActionCallbackParams = {
 export type ActionCallback = (params: ActionCallbackParams) => Promise<void>;
 
 type ChildCommandProps = {
-    name: string;
+    id: string;
     logger: ILogger;
 }
 
@@ -21,11 +21,11 @@ export class ChildCommand extends Command {
 
     constructor(
         {
-            name,
+            id,
             logger
         }: ChildCommandProps
     ) {
-        super(name);
+        super(id);
         this.logger = logger;
     }
 
@@ -39,7 +39,7 @@ export class ChildCommand extends Command {
             });
         }
 
-        return super.action(
+        return this.action(
             async function (): Promise<void> {
                 await wrappedCallback(this)
                     .catch((error: any): void => {
