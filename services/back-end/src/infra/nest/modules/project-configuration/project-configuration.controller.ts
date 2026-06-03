@@ -1,10 +1,11 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import type { IProjectConfigurationDTO } from '@ask/back-end-api';
 
 import { ProjectConfigurationService } from './project-configuration.service';
 import { FindOneProjectConfigurationDTO } from './dto/inputs/find.one.project-configuration.dto';
+import { SaveProjectConfigurationDTO } from './dto/inputs/save.project-configuration.dto';
 import { ProjectConfigurationDTO } from './dto/outputs/project-configuration.dto';
 
 
@@ -27,5 +28,16 @@ export class ProjectConfigurationController {
     ): Promise<IProjectConfigurationDTO> {
         dto.id = projectConfigurationId;
         return this.projectConfigurationService.findOne(dto);
+    }
+
+    @ApiResponse({
+        type: ProjectConfigurationDTO
+    })
+    @Post()
+    save(
+        @Body()
+        dto: SaveProjectConfigurationDTO,
+    ): Promise<IProjectConfigurationDTO> {
+        return this.projectConfigurationService.save(dto);
     }
 }

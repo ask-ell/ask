@@ -16,6 +16,8 @@ export class SaveProjectConfigurationUseCase implements ISaveProjectConfiguratio
     ){}
 
     async run(input: SaveProjectConfigurationUseCaseInput): Promise<ProjectConfigurationAggregateRootState> {
+        // TODO: protect with tokens
+
         const version: string = new Date().getTime().toString();
         const id: Id = `${input.identifier}:${version}`;
         const projectConfiguration: IProjectConfiguration = new ProjectConfiguration({
