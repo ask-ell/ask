@@ -1,6 +1,6 @@
 import { HttpClient, IResult } from "@ask-ell/core";
 
-import { IFindOneProjectConfigurationDTO, IProjectConfigurationController, IProjectConfigurationDTO } from "@ask/back-end-api";
+import { IFindOneProjectConfigurationDTO, IProjectConfigurationController, IProjectConfigurationDTO, ISaveProjectConfigurationDTO } from "@ask/back-end-api";
 
 
 export class ProjectConfigurationController implements IProjectConfigurationController {
@@ -24,6 +24,26 @@ export class ProjectConfigurationController implements IProjectConfigurationCont
         return HttpClient.get<{ data: IProjectConfigurationDTO }>({
             // TODO: https://ask-ell.atlassian.net/browse/ASK-15
             url
+        }).then(
+            (result: IResult<{ data: IProjectConfigurationDTO; }>): IProjectConfigurationDTO => {
+                if(result.isAFail()) {
+                    throw result.getError();
+                }
+                return result.getData()?.data!;
+            }
+        );
+    }
+
+    async save(body: ISaveProjectConfigurationDTO): Promise<IProjectConfigurationDTO> {
+        const url: URL = new URL(
+            `project-configurations`,
+            this.remoteUrl
+        );
+
+        return HttpClient.post<ISaveProjectConfigurationDTO, { data: IProjectConfigurationDTO }>({
+            // TODO: https://ask-ell.atlassian.net/browse/ASK-15
+            url,
+            body
         }).then(
             (result: IResult<{ data: IProjectConfigurationDTO; }>): IProjectConfigurationDTO => {
                 if(result.isAFail()) {
