@@ -2,20 +2,18 @@
     "extends": [
         {
             "id": "nx",
-            "parameters": [
-                {
-                    "name": "stack",
-                    "value": "ask-ell_governance_ask"
-                },
-                {
-                    "name": "services",
-                    "value": [
-                        {
-                            "name": "back-end"
-                        }
-                    ]
-                }
-            ]
+            "parameters": {
+                "stack": "ask-ell_governance_ask",
+                "packages": [
+                    "cli"
+                ],
+                "libs": [
+                    "back-end-api"
+                ],
+                "services": [
+                    "back-end"
+                ]
+            }
         }
     ],
     "tasks": [
