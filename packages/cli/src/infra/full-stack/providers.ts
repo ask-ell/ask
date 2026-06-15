@@ -11,12 +11,12 @@ let userConfiguration: MaybeUndefined<UserConfiguration>;
 let unitOfWork: MaybeUndefined<FullStackUnitOfWork>;
 
 export const userConfigurationFactory: UserConfigurationFactory = ({
-    options
+    rootOptions
 }: {
-    options: RootOptions
+    rootOptions: RootOptions
 }): UserConfiguration => {
     if(!userConfiguration) {
-        userConfiguration = new UserConfiguration(options);
+        userConfiguration = new UserConfiguration(rootOptions);
     }
 
     return userConfiguration;
@@ -24,18 +24,18 @@ export const userConfigurationFactory: UserConfigurationFactory = ({
 
 const getUnitOfWork = ({
     logger,
-    options
+    rootOptions
 }: {
     logger: ILogger,
-    options: RootOptions
+    rootOptions: RootOptions
 }): FullStackUnitOfWork => {
     if(!unitOfWork) {
         const userConfiguration: UserConfiguration = userConfigurationFactory({
-            options
+            rootOptions
         });
         unitOfWork = new FullStackUnitOfWork(
             logger,
-            options,
+            rootOptions,
             userConfiguration
         );
     }
@@ -44,29 +44,29 @@ const getUnitOfWork = ({
 };
 
 export const getProjectTasksUseCaseFactory: GetProjectTasksUseCaseFactory = ({
-    options,
+    rootOptions,
     logger
 }: {
-    options: RootOptions,
+    rootOptions: RootOptions,
     logger: ILogger
 }): IGetProjectTasksUseCase => {
     const unitOfWork: IUnitOfWork = getUnitOfWork({
         logger,
-        options
+        rootOptions
     });
     return new GetProjectTasksUseCase(unitOfWork);
 };
 
 export const getProjectConfigurationUseCaseFactory: GetProjectConfigurationUseCaseFactory = ({
-    options,
+    rootOptions,
     logger
 }: {
-    options: RootOptions,
+    rootOptions: RootOptions,
     logger: ILogger
 }): IGetProjectConfigurationUseCase => {
     const unitOfWork: IUnitOfWork = getUnitOfWork({
         logger,
-        options
+        rootOptions
     });
     return new GetProjectConfigurationUseCase(unitOfWork);
 };

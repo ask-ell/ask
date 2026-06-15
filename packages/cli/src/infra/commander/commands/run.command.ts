@@ -26,10 +26,10 @@ export class RunCommand extends ChildCommand {
       .wrappedAction(this.run.bind(this));
   }
 
-  private async run({ options, args }: ActionCallbackParams): Promise<void> {
+  private async run({ rootOptions, args }: ActionCallbackParams): Promise<void> {
     if (!this.getProjectTasksUseCase) {
       this.getProjectTasksUseCase = this.getProjectTasksUseCaseFactory({
-        options,
+        rootOptions,
         logger: this.logger,
       });
     }
@@ -58,7 +58,7 @@ export class RunCommand extends ChildCommand {
 
     runTask({
       logger: this.logger,
-      options,
+      rootOptions,
     })(taskToRun);
   }
 }

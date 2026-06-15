@@ -28,25 +28,25 @@ export class PullCommand extends ChildCommand {
             .wrappedAction(this.pull.bind(this));
     }
 
-    private async pull({ options, args }: ActionCallbackParams): Promise<void> {
+    private async pull({ rootOptions, args }: ActionCallbackParams): Promise<void> {
         const projectConfigurationId: string = args[0];
         this.logger.info(`Pulling project configuration "${projectConfigurationId}"...`);
 
         if(!this.getProjectConfigurationUseCase) {
             this.getProjectConfigurationUseCase = this.getProjectConfigurationUseCaseFactory({
-                options,
+                rootOptions,
                 logger: this.logger
             });
         }
 
         if(!this.userConfiguration) {
             this.userConfiguration = this.userConfigurationFactory({
-                options
+                rootOptions
             });
         }
 
-        const remoteUrl: URL = new URL(options.remote ?? this.userConfiguration.getInstance().defaultRemote);
-        const LATEST_VERSION_PROJECT_CACHE_FILE: string = VERSION_FILE_PATH('latest')(projectConfigurationId)(remoteUrl)(options.storage);
+        const remoteUrl: URL = new URL(rootOptions.remote ?? this.userConfiguration.getInstance().defaultRemote);
+        const LATEST_VERSION_PROJECT_CACHE_FILE: string = VERSION_FILE_PATH('latest')(projectConfigurationId)(remoteUrl)(rootOptions.storage);
         if(existsSync(LATEST_VERSION_PROJECT_CACHE_FILE)){
             await rm(LATEST_VERSION_PROJECT_CACHE_FILE);
         }

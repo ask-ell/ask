@@ -19,7 +19,7 @@ export class CleanCommand extends ChildCommand {
             .wrappedAction(this.clean.bind(this));
     }
 
-    private async clean({ options: { storage } }: ActionCallbackParams): Promise<void> {
+    private async clean({ rootOptions: { storage } }: ActionCallbackParams): Promise<void> {
         const cacheFolderPath: string = CACHE_FOLDER_PATH(storage);
         if(!existsSync(cacheFolderPath)) {
             this.logger.warn(`Cache directory not found at path: ${cacheFolderPath}`);

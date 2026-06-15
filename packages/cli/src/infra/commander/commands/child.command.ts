@@ -5,7 +5,7 @@ import { RootOptions } from "../../../shared/options";
 
 
 export type ActionCallbackParams = {
-    options: RootOptions;
+    rootOptions: RootOptions;
     args: string[];
 };
 
@@ -31,10 +31,10 @@ export class ChildCommand extends Command {
 
     wrappedAction(callback: ActionCallback): this {
         async function wrappedCallback(command: Command): Promise<void> {
-            const options: RootOptions = command.optsWithGlobals();
+            const rootOptions: RootOptions = command.optsWithGlobals();
             const args: string[] = command.args;
             await callback({
-                options,
+                rootOptions,
                 args
             });
         }

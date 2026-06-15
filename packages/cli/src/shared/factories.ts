@@ -6,17 +6,17 @@ import { UserConfiguration } from "./user.configuration";
 
 
 export type UserConfigurationFactory = ({
-    options
+    rootOptions
 }: {
-    options: RootOptions
+    rootOptions: RootOptions
 }) => UserConfiguration;
 
 export type GetProjectTasksUseCaseFactory = (params: {
-    options: RootOptions,
+    rootOptions: RootOptions,
     logger: ILogger
 }) => IGetProjectTasksUseCase;
 
 export type GetProjectConfigurationUseCaseFactory = (params: {
-    options: RootOptions,
+    rootOptions: RootOptions,
     logger: ILogger
 }) => IGetProjectConfigurationUseCase;

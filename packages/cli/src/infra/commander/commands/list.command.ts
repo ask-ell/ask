@@ -25,10 +25,10 @@ export class ListCommand extends ChildCommand {
             .wrappedAction(this.list.bind(this));
     }
 
-    private async list({ options }: ActionCallbackParams): Promise<void> {
+    private async list({ rootOptions }: ActionCallbackParams): Promise<void> {
         if(!this.getProjectTasksUseCase){
             this.getProjectTasksUseCase = this.getProjectTasksUseCaseFactory({
-                options,
+                rootOptions,
                 logger: this.logger
             });
         }
