@@ -57,7 +57,7 @@
           "sudo apt install -y nodejs npm",
           "npm install --global nx",
           "npm install",
-          "mkdir tmp",
+          "mkdir -p tmp",
           "date > tmp/last_install"
         ]
       },
@@ -66,7 +66,7 @@
         "description": "build project",
         "instructions": [
           "nx run-many -t build",
-          "mkdir tmp",
+          "mkdir -p tmp",
           "date > tmp/last_build"
         ],
         "files": ["tmp/last_install"]

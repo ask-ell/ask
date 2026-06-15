@@ -1,7 +1,21 @@
 {
     "extends": [
         {
-            "id": "nx"
+            "id": "nx",
+            "parameters": [
+                {
+                    "name": "stack",
+                    "value": "ask-ell_governance_ask"
+                },
+                {
+                    "name": "services",
+                    "value": [
+                        {
+                            "name": "back-end"
+                        }
+                    ]
+                }
+            ]
         }
     ],
     "tasks": [
