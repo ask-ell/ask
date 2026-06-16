@@ -3,12 +3,13 @@ import { homedir } from "os";
 import { join } from "path";
 import { Command } from "commander";
 
+import { GetProjectConfigurationUseCaseFactory, GetProjectTasksUseCaseFactory, UserConfigurationFactory } from "../../../shared/factories";
 import { RootOptions } from "../../../shared/options";
 import { CleanCommand } from "./clean.command";
 import { RunCommand } from "./run.command";
 import { PullCommand } from "./pull.command";
 import { ListCommand } from "./list.command";
-import { GetProjectConfigurationUseCaseFactory, GetProjectTasksUseCaseFactory, UserConfigurationFactory } from "../../../shared/factories";
+import { LoginCommand } from "./login.command";
 
 
 type AskCommandProps = {
@@ -41,6 +42,9 @@ export class AskCommand extends Command {
         );
         this.addCommand(
             new RunCommand(logger, getProjectTasksUseCaseFactory)
+        );
+        this.addCommand(
+            new LoginCommand(logger, userConfigurationFactory)
         );
     }
 
