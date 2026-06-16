@@ -1,4 +1,4 @@
-import { MaybeUndefined } from "@ask-ell/core";
+import { IHashedPassword, MaybeUndefined } from "@ask-ell/core";
 import { Id } from "@ask-ell/core/dist/src/ddd";
 
 import { ISaveProjectConfigurationUseCase, SaveProjectConfigurationUseCaseInput } from "../../ports/driving/use-cases/project-configuration/save.project-configuration.use-case.interface";
@@ -9,6 +9,7 @@ import { IProjectConfiguration } from "../../domain/entities/project-configurati
 import { VersionTagAggregateRootState } from "../../ports/types";
 import { DuplicatedProjectConfigurationError } from "../../errors/duplicated-project-configuration.error";
 import { UnauthorizedError } from "../../errors/unauthorized.error";
+import { IUserState } from "../../domain/entities/user/user.state.interface";
 
 
 export class SaveProjectConfigurationUseCase implements ISaveProjectConfigurationUseCase {
@@ -17,11 +18,13 @@ export class SaveProjectConfigurationUseCase implements ISaveProjectConfiguratio
     ){}
 
     async run(input: SaveProjectConfigurationUseCaseInput): Promise<ProjectConfigurationAggregateRootState> {
-        if(
-            input.creatorUsername !== 'test' ||
-            input.creatorToken !== 'test'
-        ) {
-            throw new UnauthorizedError('Creator is not an administrator');
+        const creator: MaybeUndefined<IUserState> = await this.unitOfWork.getUserProvider().findOneByLoginCredentials(input.creator);
+        if(!creator) {
+            throw new UnauthorizedError('User not found');
+        }
+
+        if(!creator.admin) {
+            throw new UnauthorizedError('Creator is not an admin');
         }
 
         const version: string = new Date().getTime().toString();
