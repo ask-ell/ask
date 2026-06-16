@@ -1,4 +1,4 @@
-import { IHashedPassword, MaybeUndefined } from "@ask-ell/core";
+import { MaybeUndefined } from "@ask-ell/core";
 import { Id } from "@ask-ell/core/dist/src/ddd";
 
 import { ISaveProjectConfigurationUseCase, SaveProjectConfigurationUseCaseInput } from "../../ports/driving/use-cases/project-configuration/save.project-configuration.use-case.interface";
@@ -19,12 +19,8 @@ export class SaveProjectConfigurationUseCase implements ISaveProjectConfiguratio
 
     async run(input: SaveProjectConfigurationUseCaseInput): Promise<ProjectConfigurationAggregateRootState> {
         const creator: MaybeUndefined<IUserState> = await this.unitOfWork.getUserProvider().findOneByLoginCredentials(input.creator);
-        if(!creator) {
-            throw new UnauthorizedError('User not found');
-        }
-
-        if(!creator.admin) {
-            throw new UnauthorizedError('Creator is not an admin');
+        if(!creator || !creator.admin) {
+            throw new UnauthorizedError();
         }
 
         const version: string = new Date().getTime().toString();

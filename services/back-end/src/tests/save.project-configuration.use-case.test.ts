@@ -82,8 +82,7 @@ describe(SaveProjectConfigurationUseCase.name, (): void => {
 
         await unitOfWork.getUserRepository().save({
             username: 'test',
-            hashedPassword: hashedPassword.toString(),
-            admin: false
+            hashedPassword: hashedPassword.toString()
         });
 
         const saveConfigurationDTO: SaveProjectConfigurationUseCaseInput = {

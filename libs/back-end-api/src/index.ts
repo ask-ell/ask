@@ -1,5 +1,6 @@
 export * from './controllers/project-configuration.controller.interface';
 export * from './dto/inputs/find.one.project-configuration.dto.interface';
+export * from './dto/inputs/login-credentials.dto.interface';
 export * from './dto/inputs/save.project-configuration.dto.interface';
 export * from './dto/outputs/account.dto.interface';
 export * from './dto/outputs/account-configuration.dto.interface';

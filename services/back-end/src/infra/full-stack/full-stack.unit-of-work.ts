@@ -3,7 +3,8 @@ import Keyv from "keyv";
 import { KeyvStoreAdapterFactory } from "@ask-ell/back-end";
 
 import { IUnitOfWork, ProjectConfigurationAggregateRootState, UnitOfWork } from "../../application";
-import { KeyvProjectConfigurationProvider, KeyvProjectConfigurationRepository, KeyvVersionTagProvider, KeyvVersionTagRepository } from "../keyv";
+import { KeyvProjectConfigurationProvider, KeyvProjectConfigurationRepository, KeyvUserProvider, KeyvUserRepository, KeyvVersionTagProvider, KeyvVersionTagRepository } from "../keyv";
+import { CryptoPasswordManager } from '../node';
 
 
 export class FullStackUnitOfWork extends UnitOfWork implements IUnitOfWork {
@@ -11,6 +12,8 @@ export class FullStackUnitOfWork extends UnitOfWork implements IUnitOfWork {
         keyvStoreAdapterFactory: KeyvStoreAdapterFactory
     ) {
         super();
+        this.passwordManager = new CryptoPasswordManager();
+
         const projectConfigurationKeyvInstance: Keyv<ProjectConfigurationAggregateRootState> = new Keyv({
             namespace: 'project-configuration',
             store: keyvStoreAdapterFactory.create({
@@ -30,5 +33,15 @@ export class FullStackUnitOfWork extends UnitOfWork implements IUnitOfWork {
         });
         this.versionTagProvider = new KeyvVersionTagProvider(versionTagKeyvInstance);
         this.versionTagRepository = new KeyvVersionTagRepository(versionTagKeyvInstance);
+
+        const userKeyvInstance: Keyv = new Keyv({
+            namespace: 'user',
+            store: keyvStoreAdapterFactory.create({
+                databaseRelativePath: "tmp/ask.sqlite",
+                postgresUri: ''
+            })
+        });
+        this.userProvider = new KeyvUserProvider(userKeyvInstance, this.passwordManager);
+        this.userRepository = new KeyvUserRepository(userKeyvInstance);
     }
 }

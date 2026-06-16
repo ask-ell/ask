@@ -8,6 +8,7 @@ import { SAVE_PROJECT_CONFIGURATION_USE_CASE } from "../../config/providers";
 import { Fixture, ProjectConfigurationFixture } from "../../../../shared/fixtures";
 import { FIXTURES_FILE_PATH } from "../../../../shared/paths";
 import { isDevMode } from "../../../../shared/environment";
+import { nxProjectConfiguration } from "./data/project-configuration/nx";
 
 
 @Injectable()
@@ -19,11 +20,11 @@ export class FixtureService {
         private saveProjectConfigurationUseCase: ISaveProjectConfigurationUseCase
     ){
         if(isDevMode) {
-            this.saveDataFromLocalFile().catch(this.logger.error.bind(this.logger));
+            this.saveDevData().catch(this.logger.error.bind(this.logger));
         }
     }
 
-    async saveDataFromLocalFile(): Promise<void> {
+    async saveDevData(): Promise<void> {
         const fixtures: Fixture[] = JSON.parse(
             await readFile(
                 FIXTURES_FILE_PATH,
@@ -37,23 +38,30 @@ export class FixtureService {
 
         await Promise.all(
             fixtures.map(async (fixture: Fixture): Promise<void> => {
-                await Promise.resolve();
-                if(fixture.type === "project-configuration") {
-                    return this.saveProjectConfiguration(fixture);
+                switch(fixture.type) {
+                    case "project-configuration":
+                        return this.saveLocalProjectConfiguration(fixture);
+                    default:
+                        return Promise.resolve();
                 }
             })
         );
+
+        await this.saveLocalProjectConfiguration(nxProjectConfiguration);
     }
 
-    private async saveProjectConfiguration(fixture: ProjectConfigurationFixture): Promise<void> {
+    private async saveLocalProjectConfiguration(fixture: ProjectConfigurationFixture): Promise<void> {
         return this.saveProjectConfigurationUseCase
             .run({
                 ...fixture,
+                creator: {
+                    username: 'test',
+                    password: 'test'
+                },
                 identifier: fixture.id
             })
             .then((): void => {
                 this.logger.info(`Project configuration "${fixture.id}" saved/ updated`);
-            })
-            .catch((error: any): void => this.logger.warn(error.message ?? error));
+            });
     }
 }

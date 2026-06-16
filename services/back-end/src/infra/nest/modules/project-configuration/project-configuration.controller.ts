@@ -5,6 +5,7 @@ import type { IProjectConfigurationDTO } from '@ask/back-end-api';
 
 import { ProjectConfigurationService } from './project-configuration.service';
 import { FindOneProjectConfigurationDTO } from './dto/inputs/find.one.project-configuration.dto';
+import { LoginCredentialsDTO } from '../../dto/inputs/login-credentials.dto';
 import { SaveProjectConfigurationDTO } from './dto/inputs/save.project-configuration.dto';
 import { ProjectConfigurationDTO } from './dto/outputs/project-configuration.dto';
 
@@ -35,9 +36,10 @@ export class ProjectConfigurationController {
     })
     @Post()
     save(
-        @Body()
-        dto: SaveProjectConfigurationDTO,
+        @Query() creator: LoginCredentialsDTO,
+        @Body() dto: SaveProjectConfigurationDTO,
     ): Promise<IProjectConfigurationDTO> {
+        dto.creator = creator;
         return this.projectConfigurationService.save(dto);
     }
 }

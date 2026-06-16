@@ -1,7 +1,7 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor, UnprocessableEntityException } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { catchError, Observable, throwError } from 'rxjs';
 
-import { DuplicatedProjectConfigurationError } from '../../../application';
+import { DuplicatedProjectConfigurationError, UnauthorizedError } from '../../../application';
 
 
 function convertApplicationError(error: unknown): unknown {
@@ -9,6 +9,10 @@ function convertApplicationError(error: unknown): unknown {
     error instanceof DuplicatedProjectConfigurationError
   ) {
     return new UnprocessableEntityException(error.originalMessage);
+  }
+
+  if(error instanceof UnauthorizedError) {
+    return new UnauthorizedException(error.originalMessage)
   }
 
   return error;
