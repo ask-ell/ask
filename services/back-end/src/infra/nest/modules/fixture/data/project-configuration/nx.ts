@@ -18,6 +18,10 @@ export const nxProjectConfiguration: ProjectConfigurationFixture = {
         {
             name: "Nx",
             url: "https://nx.dev/"
+        },
+        {
+            name: "Docker",
+            url: "https://docker.com/"
         }
     ],
     files: [
@@ -39,8 +43,6 @@ export const nxProjectConfiguration: ProjectConfigurationFixture = {
             id: "install",
             description: "install dependencies",
             instructions: [
-                "sudo apt install -y nodejs npm",
-                "npm install --global nx",
                 "npm install",
                 "mkdir -p tmp",
                 "date > tmp/last_install"
@@ -77,6 +79,16 @@ export const nxProjectConfiguration: ProjectConfigurationFixture = {
             description: "run tests",
             instructions: ["nx run-many -t test"],
             files: ["tmp/last_install"]
+        },
+        {
+            id: "deploy",
+            description: "Deploy services",
+            instructions: ["docker stack deploy --with-registry-auth --resolve-image always {{ params.stack }}"]
+        },
+        {
+            id: "undeploy",
+            description: "Stop and delete services",
+            instructions: ["docker stack rm {{ params.stack }}"]
         },
         {
             id: "clean",
