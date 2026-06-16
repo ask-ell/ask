@@ -1,14 +1,17 @@
 import { readFile } from "node:fs/promises";
 import { Inject, Injectable } from "@nestjs/common";
-import { ILogger } from "@ask-ell/core";
+import { IHashedPassword, ILogger, MaybeUndefined } from "@ask-ell/core";
 import { NestLogger } from "@ask-ell/nest";
 
-import type { ISaveProjectConfigurationUseCase } from "../../../../application";
-import { SAVE_PROJECT_CONFIGURATION_USE_CASE } from "../../config/providers";
+import { IUserDTO } from "@ask/back-end-api";
+
+import type { ISaveProjectConfigurationUseCase, IUnitOfWork, IUserState } from "../../../../application";
+import { SAVE_PROJECT_CONFIGURATION_USE_CASE, UNIT_OF_WORK_PROVIDER } from "../../config/providers";
 import { Fixture, ProjectConfigurationFixture } from "../../../../shared/fixtures";
 import { FIXTURES_FILE_PATH } from "../../../../shared/paths";
 import { isDevMode } from "../../../../shared/environment";
-import { nxProjectConfiguration } from "./data/project-configuration/nx";
+import { nxProjectConfiguration } from './data/project-configuration/nx';
+import { sortFixtures } from "./utils";
 
 
 @Injectable()
@@ -17,9 +20,11 @@ export class FixtureService {
 
     constructor(
         @Inject(SAVE_PROJECT_CONFIGURATION_USE_CASE)
-        private saveProjectConfigurationUseCase: ISaveProjectConfigurationUseCase
-    ){
-        if(isDevMode) {
+        private saveProjectConfigurationUseCase: ISaveProjectConfigurationUseCase,
+        @Inject(UNIT_OF_WORK_PROVIDER)
+        private unitOfWork: IUnitOfWork
+    ) {
+        if (isDevMode) {
             this.saveDevData().catch(this.logger.error.bind(this.logger));
         }
     }
@@ -32,22 +37,48 @@ export class FixtureService {
             )
         );
 
-        if(!fixtures.length) {
+        if (!fixtures.length) {
             this.logger.info("No fixtures to load from local file");
         }
 
         await Promise.all(
-            fixtures.map(async (fixture: Fixture): Promise<void> => {
-                switch(fixture.type) {
-                    case "project-configuration":
-                        return this.saveLocalProjectConfiguration(fixture);
-                    default:
-                        return Promise.resolve();
-                }
-            })
+            fixtures
+                .sort(sortFixtures)
+                .map(async (fixture: Fixture): Promise<void> => {
+                    switch (fixture.type) {
+                        case "user":
+                            return this.saveLocalUser(fixture);
+                        case "project-configuration":
+                            return this.saveLocalProjectConfiguration(fixture);
+                        default:
+                            return Promise.resolve();
+                    }
+                })
         );
 
         await this.saveLocalProjectConfiguration(nxProjectConfiguration);
+    }
+
+    private async saveLocalUser(fixture: IUserDTO): Promise<void> {
+        const existingUser: MaybeUndefined<IUserState> = await this.unitOfWork
+            .getUserProvider()
+            .findOneByLoginCredentials(fixture);
+        if (existingUser) {
+            return this.logger.info(`User "${existingUser.username}" already exists`);
+        }
+
+        const hashedPassword: IHashedPassword = await this.unitOfWork.getPasswordManager().generateFromPlainText(fixture.password);
+
+        return this.unitOfWork
+            .getUserRepository()
+            .save({
+                ...fixture,
+                hashedPassword: hashedPassword.toString()
+            })
+            .then((): void => {
+                this.logger.info(`User "${fixture.username}" saved`);
+            })
+            .catch((error: Error): void => this.logger.warn(error.message));
     }
 
     private async saveLocalProjectConfiguration(fixture: ProjectConfigurationFixture): Promise<void> {
@@ -62,6 +93,7 @@ export class FixtureService {
             })
             .then((): void => {
                 this.logger.info(`Project configuration "${fixture.id}" saved/ updated`);
-            });
+            })
+            .catch((error: Error): void => this.logger.warn(error.message));
     }
 }

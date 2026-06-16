@@ -3,15 +3,16 @@
     "id": "test",
     "type": "user",
     "username": "test",
-    "password": "test"
+    "password": "test",
+    "admin": true
   },
   {
     "id": "private",
     "type": "project-configuration"
   },
   {
-    "id": "private-test",
-    "type": "permission-configuration",
+    "id": "test-private",
+    "type": "user-configuration",
     "projectConfiguration": "private",
     "user": "test",
     "permissions": [

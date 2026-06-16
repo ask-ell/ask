@@ -1,6 +1,6 @@
-import type { IProjectConfigurationDTO, IAccountDTO, IAccountConfigurationDTO } from "@ask/back-end-api";
+import type { IProjectConfigurationDTO, IUserDTO, IUserConfigurationDTO } from "@ask/back-end-api";
 
 
 export type ProjectConfigurationFixture = Omit<IProjectConfigurationDTO, 'version' | 'creator'>;
 
-export type Fixture = ProjectConfigurationFixture | IAccountDTO | IAccountConfigurationDTO;
+export type Fixture = ProjectConfigurationFixture | IUserDTO | IUserConfigurationDTO;
