@@ -6,7 +6,8 @@ import {
     IUnitOfWork,
     ProjectConfigurationAggregateRootState,
     SaveProjectConfigurationUseCase,
-    SaveProjectConfigurationUseCaseInput
+    SaveProjectConfigurationUseCaseInput,
+    UnauthorizedError
 } from "../application";
 import { TestUnitOfWork } from "./test.unit-of-work";
 
@@ -24,6 +25,8 @@ describe(SaveProjectConfigurationUseCase.name, (): void => {
         const savedConfigurationDTO: SaveProjectConfigurationUseCaseInput = {
             identifier: 'project-configuration',
             description: 'Project configuration description',
+            creatorUsername: 'test',
+            creatorToken: 'test',
             public: true
         };
 
@@ -45,11 +48,43 @@ describe(SaveProjectConfigurationUseCase.name, (): void => {
         const saveConfigurationDTO: SaveProjectConfigurationUseCaseInput = {
             identifier: 'project-configuration',
             description: 'Project configuration description',
+            creatorUsername: 'test',
+            creatorToken: 'test',
             public: true
         };
 
         const result: ProjectConfigurationAggregateRootState = await saveProjectConfigurationUseCase.run(saveConfigurationDTO);
         const savedConfiguration: MaybeUndefined<ProjectConfigurationAggregateRootState> = await unitOfWork.getProjectConfigurationProvider().findOneById(result.id!);
         expect(savedConfiguration).toBeDefined();
+    });
+
+    it('should not save a project configuration with wrong creator credentials', async (): Promise<void> => {
+        let saveConfigurationDTO: SaveProjectConfigurationUseCaseInput = {
+            identifier: 'project-configuration',
+            description: 'Project configuration description',
+            creatorUsername: 'wrong',
+            creatorToken: 'test',
+            public: true
+        };
+
+        try {
+            await saveProjectConfigurationUseCase.run(saveConfigurationDTO);
+            throw new TestMustFailError();
+        } catch(error: any) {
+            expect(error).toBeInstanceOf(UnauthorizedError);
+        }
+
+        saveConfigurationDTO = {
+            ...saveConfigurationDTO,
+            creatorUsername: 'test',
+            creatorToken: 'wrong'
+        };
+
+        try {
+            await saveProjectConfigurationUseCase.run(saveConfigurationDTO);
+            throw new TestMustFailError();
+        } catch(error: any) {
+            expect(error).toBeInstanceOf(UnauthorizedError);
+        }
     });
 });

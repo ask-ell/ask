@@ -8,6 +8,7 @@ import { ProjectConfiguration } from '../../domain/entities/project-configuratio
 import { IProjectConfiguration } from "../../domain/entities/project-configuration/project-configuration.interface";
 import { VersionTagAggregateRootState } from "../../ports/types";
 import { DuplicatedProjectConfigurationError } from "../../errors/duplicated-project-configuration.error";
+import { UnauthorizedError } from "../../errors/unauthorized.error";
 
 
 export class SaveProjectConfigurationUseCase implements ISaveProjectConfigurationUseCase {
@@ -16,7 +17,12 @@ export class SaveProjectConfigurationUseCase implements ISaveProjectConfiguratio
     ){}
 
     async run(input: SaveProjectConfigurationUseCaseInput): Promise<ProjectConfigurationAggregateRootState> {
-        // TODO: protect with tokens
+        if(
+            input.creatorUsername !== 'test' ||
+            input.creatorToken !== 'test'
+        ) {
+            throw new UnauthorizedError('Creator is not an administrator');
+        }
 
         const version: string = new Date().getTime().toString();
         const id: Id = `${input.identifier}:${version}`;
