@@ -1,6 +1,0 @@
-build
-last_install
-last_build
-secrets.json
-secrets.*.json
-!secrets.sample.json
