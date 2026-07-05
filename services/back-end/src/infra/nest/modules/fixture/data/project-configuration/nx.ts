@@ -81,16 +81,6 @@ export const nxProjectConfiguration: ProjectConfigurationFixture = {
             files: ["tmp/last_install"]
         },
         {
-            id: "deploy",
-            description: "Deploy services",
-            instructions: ["docker stack deploy --with-registry-auth --resolve-image always {{ params.stack }}"]
-        },
-        {
-            id: "undeploy",
-            description: "Stop and delete services",
-            instructions: ["docker stack rm {{ params.stack }}"]
-        },
-        {
             id: "clean",
             description: "clean services cache",
             instructions: ["nx reset"]
